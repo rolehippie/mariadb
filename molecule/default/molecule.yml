@@ -7,7 +7,7 @@ lint:
   name: yamllint
   enabled: False
 platforms:
-  - name: ubuntu-18.04-docker
+  - name: ubuntu-18.04-mariadb
     server_type: cx11
     image: ubuntu-18.04
 provisioner:
