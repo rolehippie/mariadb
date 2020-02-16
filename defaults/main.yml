@@ -1,0 +1,57 @@
+# Standards: 0.1
+---
+# @var mariadb_image:description: Docker image to use
+mariadb_image: webhippie/mariadb:latest
+
+# @var mariadb_network:description: Docker network to connect to
+mariadb_network: traefik
+
+# @var mariadb_volume_server:description: Path to server volume
+mariadb_volume_server: /var/lib/mariadb
+
+# @var mariadb_volume_backup:description: Path to backup volume
+mariadb_volume_backup: /var/lib/backup
+
+# @var mariadb_publish:description: Publish the service on that binding
+mariadb_publish_server: 127.0.0.1:3306
+
+# @var mariadb_root_password:description: Password for root user
+mariadb_root_password:
+
+# @var mariadb_general_username:description: Username for general user
+mariadb_general_username:
+
+# @var mariadb_general_password:description: Password for general user
+mariadb_general_password:
+
+# @var mariadb_general_db:description: Database to create on start
+mariadb_general_db:
+
+# @var mariadb_max_allowed_packet:description: Max allowed packet size
+mariadb_max_allowed_packet: 128M
+
+# @var mariadb_innodb_log_file_size:description: Innodb log file size
+mariadb_innodb_log_file_size: 64M
+
+# @var mariadb_innodb_buffer_size:description: Innodb buffere size
+mariadb_innodb_buffer_size: 1G
+
+# @var mariadb_log_bin:description: MariaDB log bin
+mariadb_log_bin: 0
+
+# @var mariadb_max_connections:description: Max allowed connections
+mariadb_max_connections: 250
+
+# @var mariadb_default_character_set:description: Default character set
+mariadb_default_character_set: utf8mb4
+
+# @var mariadb_collation_server:description: Collation server
+mariadb_collation_server: utf8mb4_unicode_ci
+
+# @var mariadb_character_set_server:description: Character set server
+mariadb_character_set_server: utf8mb4
+
+# @var mariadb_cron_enabled:description: Enable integrated cronjob
+mariadb_cron_enabled: False
+
+...

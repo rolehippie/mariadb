@@ -1,0 +1,58 @@
+# Standards: 0.1
+---
+- name: Install client package
+  package:
+    name: mariadb-client
+    state: present
+  tags:
+    - mariadb
+
+- name: Create server volume
+  when: mariadb_volume_server | default(False)
+  file:
+    path: '{{ mariadb_volume_server }}'
+    state: directory
+  tags:
+    - mariadb
+
+- name: Create backup volume
+  when: mariadb_volume_backup | default(False)
+  file:
+    path: '{{ mariadb_volume_backup }}'
+    state: directory
+  tags:
+    - mariadb
+
+- name: Write env config
+  notify:
+    - Restart mariadb
+  template:
+    src: default.j2
+    dest: /etc/default/mariadb
+  tags:
+    - mariadb
+
+- name: Write service file
+  notify:
+    - Restart mariadb
+  template:
+    src: service.j2
+    dest: /etc/systemd/system/mariadb.service
+  tags:
+    - mariadb
+
+- name: Create docker network
+  docker_network:
+    name: '{{ mariadb_network }}'
+
+- name: Start service
+  systemd:
+    name: mariadb
+    state: started
+    daemon_reload: yes
+    masked: no
+    enabled: yes
+  tags:
+    - mariadb
+
+...
