@@ -40,7 +40,7 @@ steps:
   pull: always
   environment:
     HCLOUD_TOKEN:
-      from_secret: molecule_hcloud_token
+      from_secret: hcloud_token
   commands:
   - molecule test -s default
 
@@ -90,7 +90,7 @@ steps:
     ANSIBLE_DOCTOR_CUSTOM_HEADER: HEADER.md
 
 - name: diff
-  image: webhippie/alpine:latest
+  image: toolhippie/git:latest
   pull: always
   commands:
     - git diff

@@ -1,5 +1,8 @@
 ---
 - name: Converge
   hosts: all
+  vars:
+    mariadb_network: bridge
   roles:
+    - role: docker
     - role: mariadb
