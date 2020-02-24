@@ -45,7 +45,7 @@
   docker_network:
     name: '{{ mariadb_network }}'
 
-- name: Start service
+- name: Start mariadb service
   systemd:
     name: mariadb
     state: started

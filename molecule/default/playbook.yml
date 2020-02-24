@@ -3,6 +3,10 @@
   hosts: all
   vars:
     mariadb_network: bridge
+    mariadb_root_password: p455w0rd
+    mariadb_general_username: test
+    mariadb_general_password: test
+    mariadb_general_db: test
   roles:
     - role: docker
     - role: mariadb
