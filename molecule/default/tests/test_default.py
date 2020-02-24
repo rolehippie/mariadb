@@ -10,3 +10,9 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_service_file(host):
     file = host.file("/etc/systemd/system/mariadb.service")
     assert file.exists
+
+
+def test_running_and_enabled(host):
+    svc = host.service("mariadb")
+    assert svc.is_running
+    assert svc.is_enabled
