@@ -4,7 +4,8 @@
 mariadb_image: webhippie/mariadb:latest
 
 # @var mariadb_network:description: Docker network to connect to
-mariadb_network: traefik
+# @var mariadb_network:example: $ "traefik"
+mariadb_network:
 
 # @var mariadb_volume_server:description: Path to server volume
 mariadb_volume_server: /var/lib/mariadb

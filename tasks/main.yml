@@ -42,6 +42,7 @@
     - mariadb
 
 - name: Create docker network
+  when: mariadb_network | default(False)
   docker_network:
     name: "{{ mariadb_network }}"
 
