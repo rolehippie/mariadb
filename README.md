@@ -171,6 +171,12 @@ Docker network to connect to
 #### Default value
 
 ```YAML
+mariadb_network:
+```
+
+#### Example usage
+
+```YAML
 mariadb_network: traefik
 ```
 
@@ -218,7 +224,7 @@ mariadb_volume_server: /var/lib/mariadb
 
 ## Dependencies
 
-- '[docker](https://github.com/rolehippie/docker)'
+* [docker](https://github.com/rolehippie/docker)
 
 ## License
 
