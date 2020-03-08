@@ -10,7 +10,7 @@
 - name: Create server volume
   when: mariadb_volume_server | default(False)
   file:
-    path: '{{ mariadb_volume_server }}'
+    path: "{{ mariadb_volume_server }}"
     state: directory
   tags:
     - mariadb
@@ -18,7 +18,7 @@
 - name: Create backup volume
   when: mariadb_volume_backup | default(False)
   file:
-    path: '{{ mariadb_volume_backup }}'
+    path: "{{ mariadb_volume_backup }}"
     state: directory
   tags:
     - mariadb
@@ -43,15 +43,15 @@
 
 - name: Create docker network
   docker_network:
-    name: '{{ mariadb_network }}'
+    name: "{{ mariadb_network }}"
 
 - name: Start mariadb service
   systemd:
     name: mariadb
     state: started
-    daemon_reload: yes
-    masked: no
-    enabled: yes
+    daemon_reload: True
+    masked: False
+    enabled: True
   tags:
     - mariadb
 
