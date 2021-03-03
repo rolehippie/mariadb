@@ -1,4 +1,4 @@
-# Standards: 0.1
+# Standards: 1.2
 ---
 - name: Check existing install
   register: mariadb_exporter_version_check
