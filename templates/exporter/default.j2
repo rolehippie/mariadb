@@ -1,0 +1,1 @@
+ARGS="--config.my-cnf=/root/.my.cnf{{ ' --collect.info_schema.tables' if mariadb_exporter_collect_info_schema_tables else '' }}{{ ' ' + mariadb_exporter_args | join(' ') if mariadb_exporter_args | default(False) else '' }}"

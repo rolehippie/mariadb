@@ -1,7 +1,7 @@
 ---
 repository:
   name: mariadb
-  description: Ansible role to install and configure MariaDB
+  description: Ansible role to install and configure a simple MariaDB
   topics: ansible, role, ansible-role, hacktoberfest
 
   private: false

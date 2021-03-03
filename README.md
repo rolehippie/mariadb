@@ -2,7 +2,7 @@
 
 [![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/rolehippie/mariadb) [![Build Status](https://img.shields.io/drone/build/rolehippie/mariadb/master?logo=drone)](https://cloud.drone.io/rolehippie/mariadb) [![License: Apache-2.0](https://img.shields.io/github/license/rolehippie/mariadb)](https://github.com/rolehippie/mariadb/blob/master/LICENSE) 
 
-Ansible role to install and configure MariaDB. 
+Ansible role to install and configure a simple MariaDB. 
 
 ## Sponsor 
 
@@ -13,25 +13,32 @@ Building and improving this Ansible role have been sponsored by my employer **Pr
 ## Table of content
 
 * [Default Variables](#default-variables)
-  * [mariadb_character_set_server](#mariadb_character_set_server)
-  * [mariadb_collation_server](#mariadb_collation_server)
-  * [mariadb_cron_enabled](#mariadb_cron_enabled)
-  * [mariadb_default_character_set](#mariadb_default_character_set)
-  * [mariadb_general_db](#mariadb_general_db)
-  * [mariadb_general_password](#mariadb_general_password)
-  * [mariadb_general_username](#mariadb_general_username)
-  * [mariadb_image](#mariadb_image)
-  * [mariadb_innodb_buffer_size](#mariadb_innodb_buffer_size)
-  * [mariadb_innodb_log_file_size](#mariadb_innodb_log_file_size)
-  * [mariadb_log_bin](#mariadb_log_bin)
+  * [mariadb_backup_addition_script](#mariadb_backup_addition_script)
+  * [mariadb_backup_cron](#mariadb_backup_cron)
+  * [mariadb_backup_enabled](#mariadb_backup_enabled)
+  * [mariadb_backup_formatting](#mariadb_backup_formatting)
+  * [mariadb_backup_ignore](#mariadb_backup_ignore)
+  * [mariadb_backup_path](#mariadb_backup_path)
+  * [mariadb_backup_retention](#mariadb_backup_retention)
+  * [mariadb_bind_address](#mariadb_bind_address)
+  * [mariadb_exporter_args](#mariadb_exporter_args)
+  * [mariadb_exporter_collect_info_schema_tables](#mariadb_exporter_collect_info_schema_tables)
+  * [mariadb_exporter_download](#mariadb_exporter_download)
+  * [mariadb_exporter_enabled](#mariadb_exporter_enabled)
+  * [mariadb_exporter_version](#mariadb_exporter_version)
+  * [mariadb_extra_databases](#mariadb_extra_databases)
+  * [mariadb_extra_users](#mariadb_extra_users)
+  * [mariadb_global_databases](#mariadb_global_databases)
+  * [mariadb_global_users](#mariadb_global_users)
+  * [mariadb_ignore_db_dirs](#mariadb_ignore_db_dirs)
+  * [mariadb_lower_case_table_names](#mariadb_lower_case_table_names)
   * [mariadb_max_allowed_packet](#mariadb_max_allowed_packet)
   * [mariadb_max_connections](#mariadb_max_connections)
-  * [mariadb_network](#mariadb_network)
-  * [mariadb_publish](#mariadb_publish)
-  * [mariadb_publish_server](#mariadb_publish_server)
+  * [mariadb_packages](#mariadb_packages)
+  * [mariadb_root_hosts](#mariadb_root_hosts)
   * [mariadb_root_password](#mariadb_root_password)
-  * [mariadb_volume_backup](#mariadb_volume_backup)
-  * [mariadb_volume_server](#mariadb_volume_server)
+  * [mariadb_root_username](#mariadb_root_username)
+  * [mariadb_temp_directory](#mariadb_temp_directory)
 * [Dependencies](#dependencies)
 * [License](#license)
 * [Author](#author)
@@ -40,124 +47,255 @@ Building and improving this Ansible role have been sponsored by my employer **Pr
 
 ## Default Variables
 
-### mariadb_character_set_server
+### mariadb_backup_addition_script
 
-Character set server
+Additional commands at the end of the script
 
 #### Default value
 
 ```YAML
-mariadb_character_set_server: utf8mb4
+mariadb_backup_addition_script:
 ```
 
-### mariadb_collation_server
+### mariadb_backup_cron
 
-Collation server
+A simple cron timing definition like hourly, daily or weekly
 
 #### Default value
 
 ```YAML
-mariadb_collation_server: utf8mb4_unicode_ci
+mariadb_backup_cron: daily
 ```
 
-### mariadb_cron_enabled
+### mariadb_backup_enabled
 
-Enable integrated cronjob
+Enable or disable the backup script
 
 #### Default value
 
 ```YAML
-mariadb_cron_enabled: false
+mariadb_backup_enabled: false
 ```
 
-### mariadb_default_character_set
+### mariadb_backup_formatting
 
-Default character set
+Date format for the backup folder name
 
 #### Default value
 
 ```YAML
-mariadb_default_character_set: utf8mb4
+mariadb_backup_formatting: '%F'
 ```
 
-### mariadb_general_db
+### mariadb_backup_ignore
 
-Database to create on start
+Ignoring this filter via grep on database selection
 
 #### Default value
 
 ```YAML
-mariadb_general_db:
+mariadb_backup_ignore: (_backup|mysql|information_schema|performance_schema)
 ```
 
-### mariadb_general_password
+### mariadb_backup_path
 
-Password for general user
+Path to store the backups
 
 #### Default value
 
 ```YAML
-mariadb_general_password:
+mariadb_backup_path: /var/lib/mysql/_backup
 ```
 
-### mariadb_general_username
+### mariadb_backup_retention
 
-Username for general user
+Retention period to keep backups
 
 #### Default value
 
 ```YAML
-mariadb_general_username:
+mariadb_backup_retention: 7
 ```
 
-### mariadb_image
+### mariadb_bind_address
 
-Docker image to use
+Bind address for the server
 
 #### Default value
 
 ```YAML
-mariadb_image: webhippie/mariadb:latest
+mariadb_bind_address: 0.0.0.0
 ```
 
-### mariadb_innodb_buffer_size
+### mariadb_exporter_args
 
-Innodb buffere size
+List of arguments joined for the executable
 
 #### Default value
 
 ```YAML
-mariadb_innodb_buffer_size: 1G
+mariadb_exporter_args: []
 ```
 
-### mariadb_innodb_log_file_size
+### mariadb_exporter_collect_info_schema_tables
 
-Innodb log file size
+Enable info schema tables collector
 
 #### Default value
 
 ```YAML
-mariadb_innodb_log_file_size: 64M
+mariadb_exporter_collect_info_schema_tables: true
 ```
 
-### mariadb_log_bin
+### mariadb_exporter_download
 
-MariaDB log bin
+URL to the archive of the release to install
 
 #### Default value
 
 ```YAML
-mariadb_log_bin: 0
+mariadb_exporter_download: https://github.com/prometheus/mysqld_exporter/releases/download/v{{
+  mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64.tar.gz
+```
+
+### mariadb_exporter_enabled
+
+Enable the mariadb exporter
+
+#### Default value
+
+```YAML
+mariadb_exporter_enabled: true
+```
+
+### mariadb_exporter_version
+
+Version of the release to install
+
+#### Default value
+
+```YAML
+mariadb_exporter_version: 0.12.1
+```
+
+### mariadb_extra_databases
+
+List of additional databases to create
+
+#### Default value
+
+```YAML
+mariadb_extra_databases: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_extra_databases:
+  - name: example
+    collation: utf8mb4_general_ci
+    encoding: utf8mb4
+    state: present
+  - name: foobar
+    state: absent
+```
+
+### mariadb_extra_users
+
+List of additional users to create
+
+#### Default value
+
+```YAML
+mariadb_extra_users: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_extra_users:
+  - name: example
+    password: p433w0rd
+    host: '%'
+    priv: '*.*:ALL'
+    state: present
+  - name: foobar
+    state: absent
+```
+
+### mariadb_global_databases
+
+List of databases to create
+
+#### Default value
+
+```YAML
+mariadb_global_databases: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_global_databases:
+  - name: example
+    collation: utf8mb4_general_ci
+    encoding: utf8mb4
+    state: present
+  - name: foobar
+    state: absent
+```
+
+### mariadb_global_users
+
+List of users to create
+
+#### Default value
+
+```YAML
+mariadb_global_users: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_global_users:
+  - name: example
+    password: p433w0rd
+    host: '%'
+    priv: '*.*:ALL'
+    state: present
+  - name: foobar
+    state: absent
+```
+
+### mariadb_ignore_db_dirs
+
+List of ignored database directories
+
+#### Default value
+
+```YAML
+mariadb_ignore_db_dirs: []
+```
+
+### mariadb_lower_case_table_names
+
+Lowercase table names
+
+#### Default value
+
+```YAML
+mariadb_lower_case_table_names: 0
 ```
 
 ### mariadb_max_allowed_packet
 
-Max allowed packet size
+Max allowed packet
 
 #### Default value
 
 ```YAML
-mariadb_max_allowed_packet: 128M
+mariadb_max_allowed_packet: 64M
 ```
 
 ### mariadb_max_connections
@@ -167,65 +305,63 @@ Max allowed connections
 #### Default value
 
 ```YAML
-mariadb_max_connections: 250
+mariadb_max_connections: 1000
 ```
 
-### mariadb_network
+### mariadb_packages
 
-Docker network to connect to
+List of packages to install
 
 #### Default value
 
 ```YAML
-mariadb_network:
+mariadb_packages:
+  - mariadb-server
+  - mariadb-client
+  - mariadb-backup
+  - mycli
+  - python3-pymysql
 ```
 
-#### Example usage
+### mariadb_root_hosts
 
-```YAML
-mariadb_network: traefik
-```
-
-### mariadb_publish
-
-Publish the service on that binding
-
-### mariadb_publish_server
+Allowed hosts for root user
 
 #### Default value
 
 ```YAML
-mariadb_publish_server: 127.0.0.1:3306
+mariadb_root_hosts:
+  - localhost
 ```
 
 ### mariadb_root_password
 
-Password for root user
+Password for the root user
 
 #### Default value
 
 ```YAML
-mariadb_root_password:
+mariadb_root_password: root
 ```
 
-### mariadb_volume_backup
+### mariadb_root_username
 
-Path to backup volume
+Username for the root user
 
 #### Default value
 
 ```YAML
-mariadb_volume_backup: /var/lib/backup
+mariadb_root_username: root
 ```
 
-### mariadb_volume_server
+### mariadb_temp_directory
 
-Path to server volume
+Temporary directory used by MariaDB
 
 #### Default value
 
 ```YAML
-mariadb_volume_server: /var/lib/mariadb
+mariadb_temp_directory:
 ```
 
 ## Dependencies

@@ -1,0 +1,11 @@
+[Unit]
+Description=Prometheus exporter for MariaDB
+After=network-online.target
+
+[Service]
+Restart=always
+EnvironmentFile=/etc/default/mariadb-exporter
+ExecStart=/usr/bin/mariadb-exporter $ARGS
+
+[Install]
+WantedBy=multi-user.target

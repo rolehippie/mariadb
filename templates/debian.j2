@@ -1,0 +1,11 @@
+[client]
+host = localhost
+user = {{ mariadb_root_username }}
+password = {{ mariadb_root_password }}
+socket = /var/run/mysqld/mysqld.sock
+
+[mysql_upgrade]
+host = localhost
+user = {{ mariadb_root_username }}
+password = {{ mariadb_root_password }}
+socket = /var/run/mysqld/mysqld.sock

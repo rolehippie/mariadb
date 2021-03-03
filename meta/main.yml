@@ -6,7 +6,7 @@
 # [![Build Status](https://img.shields.io/drone/build/rolehippie/mariadb/master?logo=drone)](https://cloud.drone.io/rolehippie/mariadb)
 # [![License: Apache-2.0](https://img.shields.io/github/license/rolehippie/mariadb)](https://github.com/rolehippie/mariadb/blob/master/LICENSE)
 #
-# Ansible role to install and configure MariaDB.
+# Ansible role to install and configure a simple MariaDB.
 #
 # ## Sponsor
 #
@@ -19,7 +19,7 @@
 # @end
 galaxy_info:
   author: Thomas Boerger
-  description: Ansible role to install and configure MariaDB
+  description: Ansible role to install and configure a simple MariaDB
   license: Apache-2.0
   min_ansible_version: 2.10
   platforms:
@@ -29,6 +29,7 @@ galaxy_info:
         - focal
   galaxy_tags:
     - mariadb
+    - database
     - mysql
 
 dependencies: []

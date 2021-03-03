@@ -1,0 +1,78 @@
+# Standards: 0.1
+---
+- name: Check existing install
+  register: mariadb_exporter_version_check
+  failed_when: False
+  changed_when: False
+  check_mode: False
+  command: /usr/bin/mariadb-exporter --version
+  tags:
+    - mariadb-exporter
+
+- name: Fact version change
+  set_fact:
+    mariadb_exporter_version_changed: "{{ mariadb_exporter_version_check.rc != 0 or (mariadb_exporter_version_check.stderr_lines is defined and mariadb_exporter_version not in mariadb_exporter_version_check.stderr_lines[0]) | bool }}"
+  tags:
+    - mariadb-exporter
+
+- name: Download release tarball
+  when: mariadb_exporter_version_changed
+  unarchive:
+    src: "{{ mariadb_exporter_download }}"
+    dest: /usr/local/src
+    remote_src: True
+    owner: root
+    group: root
+  tags:
+    - mariadb-exporter
+
+- name: Copy exporter binary
+  when: mariadb_exporter_version_changed and not ansible_check_mode
+  notify:
+    - Restart mariadb-exporter
+  copy:
+    src: "/usr/local/src/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64/mysqld_exporter"
+    dest: /usr/bin/mariadb-exporter
+    remote_src: True
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  tags:
+    - mariadb-exporter
+
+- name: Write default config
+  notify:
+    - Restart mariadb-exporter
+  template:
+    src: exporter/default.j2
+    dest: /etc/default/mariadb-exporter
+  tags:
+    - mariadb-exporter
+
+- name: Write service file
+  notify:
+    - Restart mariadb-exporter
+  template:
+    src: exporter/service.j2
+    dest: /etc/systemd/system/mariadb-exporter.service
+  tags:
+    - mariadb-exporter
+
+- name: Start mariadb-exporter service
+  systemd:
+    name: mariadb-exporter
+    state: started
+    daemon_reload: True
+    masked: False
+    enabled: True
+  tags:
+    - mariadb-exporter
+
+- name: Remove install directory
+  file:
+    path: "/usr/local/src/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64"
+    state: absent
+  tags:
+    - mariadb-exporter
+
+...
