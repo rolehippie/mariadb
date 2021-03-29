@@ -26,6 +26,9 @@ mariadb_max_connections: 1000
 # @var mariadb_lower_case_table_names:description: Lowercase table names
 mariadb_lower_case_table_names: 0
 
+# @var mariadb_limit_number_files:description: Number of allowed open files for systemd service
+mariadb_limit_number_files: 32768
+
 # @var mariadb_root_username:description: Username for the root user
 mariadb_root_username: root
 

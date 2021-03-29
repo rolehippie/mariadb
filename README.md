@@ -31,6 +31,7 @@ Building and improving this Ansible role have been sponsored by my employer **Pr
   * [mariadb_global_databases](#mariadb_global_databases)
   * [mariadb_global_users](#mariadb_global_users)
   * [mariadb_ignore_db_dirs](#mariadb_ignore_db_dirs)
+  * [mariadb_limit_number_files](#mariadb_limit_number_files)
   * [mariadb_lower_case_table_names](#mariadb_lower_case_table_names)
   * [mariadb_max_allowed_packet](#mariadb_max_allowed_packet)
   * [mariadb_max_connections](#mariadb_max_connections)
@@ -276,6 +277,16 @@ List of ignored database directories
 
 ```YAML
 mariadb_ignore_db_dirs: []
+```
+
+### mariadb_limit_number_files
+
+Number of allowed open files for systemd service
+
+#### Default value
+
+```YAML
+mariadb_limit_number_files: 32768
 ```
 
 ### mariadb_lower_case_table_names

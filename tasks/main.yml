@@ -36,6 +36,15 @@
   tags:
     - mariadb
 
+- name: Write service override
+  notify:
+    - Restart mariadb
+  template:
+    src: override.j2
+    dest: /etc/systemd/system/mariadb.service.d/override.conf
+  tags:
+    - mariadb
+
 - name: Start mariadb service
   systemd:
     name: mariadb
