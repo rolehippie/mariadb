@@ -1,5 +1,14 @@
 # Standards: 1.2
 ---
+- name: Create required dirs
+  loop:
+    - /etc/systemd/system/mariadb.service.d
+  file:
+    path: "{{ item }}"
+    state: directory
+  tags:
+    - mariadb
+
 - name: Install required packages
   loop: "{{ mariadb_packages }}"
   package:
