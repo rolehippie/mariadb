@@ -26,6 +26,7 @@ Building and improving this Ansible role have been sponsored by my employer **Pr
   * [mariadb_exporter_download](#mariadb_exporter_download)
   * [mariadb_exporter_enabled](#mariadb_exporter_enabled)
   * [mariadb_exporter_version](#mariadb_exporter_version)
+  * [mariadb_extra_configs](#mariadb_extra_configs)
   * [mariadb_extra_databases](#mariadb_extra_databases)
   * [mariadb_extra_users](#mariadb_extra_users)
   * [mariadb_global_databases](#mariadb_global_databases)
@@ -177,6 +178,30 @@ Version of the release to install
 
 ```YAML
 mariadb_exporter_version: 0.12.1
+```
+
+### mariadb_extra_configs
+
+Write additional config files
+
+#### Default value
+
+```YAML
+mariadb_extra_configs: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_extra_configs:
+  - name: example
+    priority: 50
+    content: |
+      foo1 = bar1
+      foo2 = bar2
+      foo3 = bar3
+  - name: foobar
+    state: absent
 ```
 
 ### mariadb_extra_databases

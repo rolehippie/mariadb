@@ -89,6 +89,20 @@ mariadb_global_users: []
 # @end
 mariadb_extra_users: []
 
+# @var mariadb_extra_configs:description: Write additional config files
+# @var mariadb_extra_configs:example: >
+# mariadb_extra_configs:
+#   - name: example
+#     priority: 50
+#     content: |
+#       foo1 = bar1
+#       foo2 = bar2
+#       foo3 = bar3
+#   - name: foobar
+#     state: absent
+# @end
+mariadb_extra_configs: []
+
 # @var mariadb_backup_enabled:description: Enable or disable the backup script
 mariadb_backup_enabled: False
 

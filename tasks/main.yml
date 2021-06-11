@@ -36,6 +36,35 @@
   tags:
     - mariadb
 
+- name: Write extra configs
+  loop: "{{ mariadb_extra_configs }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: item.state | default("present") == "present"
+  notify:
+    - Restart mariadb
+  copy:
+    content: "{{ item.content }}"
+    dest: "/etc/mysql/mariadb.conf.d/{{ item.priority | default('99') }}-{{ item.name }}.cnf"
+    owner: root
+    group: root
+    mode: o=rw,g=r,o=r
+  tags:
+    - mariadb
+
+- name: Delete extra configs
+  loop: "{{ mariadb_extra_configs }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: item.state | default("present") == "absent"
+  notify:
+    - Restart mariadb
+  file:
+    path: "/etc/mysql/mariadb.conf.d/{{ item.priority | default('99') }}-{{ item.name }}.cnf"
+    state: absent
+  tags:
+    - mariadb
+
 - name: Write override config
   notify:
     - Restart mariadb
