@@ -29,18 +29,39 @@ Building and improving this Ansible role have been sponsored by my employer **Pr
   * [mariadb_extra_configs](#mariadb_extra_configs)
   * [mariadb_extra_databases](#mariadb_extra_databases)
   * [mariadb_extra_users](#mariadb_extra_users)
+  * [mariadb_galera_address](#mariadb_galera_address)
+  * [mariadb_galera_cluster](#mariadb_galera_cluster)
+  * [mariadb_galera_enabled](#mariadb_galera_enabled)
+  * [mariadb_galera_name](#mariadb_galera_name)
+  * [mariadb_galera_nodes](#mariadb_galera_nodes)
+  * [mariadb_galera_primary](#mariadb_galera_primary)
   * [mariadb_global_databases](#mariadb_global_databases)
   * [mariadb_global_users](#mariadb_global_users)
   * [mariadb_ignore_db_dirs](#mariadb_ignore_db_dirs)
+  * [mariadb_innodb_buffer_pool_instances](#mariadb_innodb_buffer_pool_instances)
+  * [mariadb_innodb_buffer_pool_size](#mariadb_innodb_buffer_pool_size)
+  * [mariadb_innodb_file_per_table](#mariadb_innodb_file_per_table)
+  * [mariadb_innodb_flush_log_at_trx_commit](#mariadb_innodb_flush_log_at_trx_commit)
+  * [mariadb_innodb_io_capacity](#mariadb_innodb_io_capacity)
+  * [mariadb_innodb_max_dirty_pages_pct](#mariadb_innodb_max_dirty_pages_pct)
+  * [mariadb_key_buffer_size](#mariadb_key_buffer_size)
   * [mariadb_limit_number_files](#mariadb_limit_number_files)
   * [mariadb_lower_case_table_names](#mariadb_lower_case_table_names)
   * [mariadb_max_allowed_packet](#mariadb_max_allowed_packet)
   * [mariadb_max_connections](#mariadb_max_connections)
+  * [mariadb_oom_score_adjust](#mariadb_oom_score_adjust)
   * [mariadb_packages](#mariadb_packages)
+  * [mariadb_query_cache_size](#mariadb_query_cache_size)
+  * [mariadb_query_cache_type](#mariadb_query_cache_type)
   * [mariadb_root_hosts](#mariadb_root_hosts)
   * [mariadb_root_password](#mariadb_root_password)
   * [mariadb_root_username](#mariadb_root_username)
+  * [mariadb_skip_name_resolve](#mariadb_skip_name_resolve)
+  * [mariadb_symbolic_links](#mariadb_symbolic_links)
   * [mariadb_temp_directory](#mariadb_temp_directory)
+  * [mariadb_timeout_start_sec](#mariadb_timeout_start_sec)
+  * [mariadb_upstream_repo](#mariadb_upstream_repo)
+  * [mariadb_upstream_version](#mariadb_upstream_version)
 * [Dependencies](#dependencies)
 * [License](#license)
 * [Author](#author)
@@ -249,6 +270,64 @@ mariadb_extra_users:
     state: absent
 ```
 
+### mariadb_galera_address
+
+Node address within galera cluster
+
+#### Default value
+
+```YAML
+mariadb_galera_address: '{{ ansible_address }}'
+```
+
+### mariadb_galera_cluster
+
+#### Default value
+
+```YAML
+mariadb_galera_cluster: galera
+```
+
+### mariadb_galera_enabled
+
+Enable galera clustering
+
+#### Default value
+
+```YAML
+mariadb_galera_enabled: false
+```
+
+### mariadb_galera_name
+
+Node name within galera cluster
+
+#### Default value
+
+```YAML
+mariadb_galera_name: '{{ inventory_hostname }}'
+```
+
+### mariadb_galera_nodes
+
+Node addresses part of galera cluster
+
+#### Default value
+
+```YAML
+mariadb_galera_nodes: []
+```
+
+### mariadb_galera_primary
+
+Inventory of primary galera node
+
+#### Default value
+
+```YAML
+mariadb_galera_primary:
+```
+
 ### mariadb_global_databases
 
 List of databases to create
@@ -304,6 +383,76 @@ List of ignored database directories
 mariadb_ignore_db_dirs: []
 ```
 
+### mariadb_innodb_buffer_pool_instances
+
+InnoDB buffer pool instances
+
+#### Default value
+
+```YAML
+mariadb_innodb_buffer_pool_instances: 1
+```
+
+### mariadb_innodb_buffer_pool_size
+
+InnoDB buffer pool size
+
+#### Default value
+
+```YAML
+mariadb_innodb_buffer_pool_size: 256M
+```
+
+### mariadb_innodb_file_per_table
+
+InnoDB file per table
+
+#### Default value
+
+```YAML
+mariadb_innodb_file_per_table: 1
+```
+
+### mariadb_innodb_flush_log_at_trx_commit
+
+InnoDB flush at trx commit
+
+#### Default value
+
+```YAML
+mariadb_innodb_flush_log_at_trx_commit: 1
+```
+
+### mariadb_innodb_io_capacity
+
+InnoDB IO capacity
+
+#### Default value
+
+```YAML
+mariadb_innodb_io_capacity: 1000
+```
+
+### mariadb_innodb_max_dirty_pages_pct
+
+InnoDB max dirty pages percentage
+
+#### Default value
+
+```YAML
+mariadb_innodb_max_dirty_pages_pct: 90
+```
+
+### mariadb_key_buffer_size
+
+Key buffer size
+
+#### Default value
+
+```YAML
+mariadb_key_buffer_size: 32M
+```
+
 ### mariadb_limit_number_files
 
 Number of allowed open files for systemd service
@@ -344,6 +493,16 @@ Max allowed connections
 mariadb_max_connections: 1000
 ```
 
+### mariadb_oom_score_adjust
+
+Adjustment score for OOM killer
+
+#### Default value
+
+```YAML
+mariadb_oom_score_adjust: -999
+```
+
 ### mariadb_packages
 
 List of packages to install
@@ -357,6 +516,27 @@ mariadb_packages:
   - mariadb-backup
   - mycli
   - python3-pymysql
+  - rsync
+```
+
+### mariadb_query_cache_size
+
+Query cache size
+
+#### Default value
+
+```YAML
+mariadb_query_cache_size: 0
+```
+
+### mariadb_query_cache_type
+
+Query cache type
+
+#### Default value
+
+```YAML
+mariadb_query_cache_type: 0
 ```
 
 ### mariadb_root_hosts
@@ -368,6 +548,7 @@ Allowed hosts for root user
 ```YAML
 mariadb_root_hosts:
   - localhost
+  - 127.0.0.1
 ```
 
 ### mariadb_root_password
@@ -390,6 +571,26 @@ Username for the root user
 mariadb_root_username: root
 ```
 
+### mariadb_skip_name_resolve
+
+Skip name resolving
+
+#### Default value
+
+```YAML
+mariadb_skip_name_resolve: true
+```
+
+### mariadb_symbolic_links
+
+Symbolic links
+
+#### Default value
+
+```YAML
+mariadb_symbolic_links: 0
+```
+
 ### mariadb_temp_directory
 
 Temporary directory used by MariaDB
@@ -398,6 +599,36 @@ Temporary directory used by MariaDB
 
 ```YAML
 mariadb_temp_directory:
+```
+
+### mariadb_timeout_start_sec
+
+Time to wait for daemon startup
+
+#### Default value
+
+```YAML
+mariadb_timeout_start_sec: 120
+```
+
+### mariadb_upstream_repo
+
+Install from upstream repository
+
+#### Default value
+
+```YAML
+mariadb_upstream_repo: true
+```
+
+### mariadb_upstream_version
+
+Upstream repo version
+
+#### Default value
+
+```YAML
+mariadb_upstream_version: 10.6
 ```
 
 ## Dependencies

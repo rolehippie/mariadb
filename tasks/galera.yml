@@ -1,0 +1,75 @@
+# Standards: 1.2
+---
+- name: Check galera status
+  register: mariadb_galera_status
+  delegate_to: "{{ mariadb_galera_primary }}"
+  run_once: True
+  mysql_info:
+    filter: settings
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    login_user: "{{ mariadb_root_username }}"
+    login_password: "{{ mariadb_root_password }}"
+  tags:
+    - mariadb
+
+- name: Stop mariadb services
+  when:
+    - mariadb_galera_status.settings.wsrep_on == 'OFF'
+  systemd:
+    name: mariadb
+    state: stopped
+    daemon_reload: True
+    masked: False
+    enabled: True
+  tags:
+    - mariadb
+
+- name: Initial galera config
+  when:
+    - mariadb_galera_status.settings.wsrep_on == 'OFF'
+    - inventory_hostname == mariadb_galera_primary
+  vars:
+    mariadb_galera_nodes: []
+  template:
+    src: galera.j2
+    dest: /etc/mysql/mariadb.conf.d/60-galera.cnf
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  tags:
+    - mariadb
+
+- name: Create galera cluster
+  when:
+    - mariadb_galera_status.settings.wsrep_on == 'OFF'
+    - inventory_hostname == mariadb_galera_primary
+  command: galera_new_cluster
+  tags:
+    - mariadb
+
+- name: Restore galera config
+  when:
+    - mariadb_galera_status.settings.wsrep_on == 'OFF'
+    - inventory_hostname == mariadb_galera_primary
+  template:
+    src: galera.j2
+    dest: /etc/mysql/mariadb.conf.d/60-galera.cnf
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  tags:
+    - mariadb
+
+- name: Start galera cluster
+  when:
+    - mariadb_galera_status.settings.wsrep_on == 'OFF'
+  systemd:
+    name: mariadb
+    state: started
+    daemon_reload: True
+    masked: False
+    enabled: True
+  tags:
+    - mariadb
+
+...

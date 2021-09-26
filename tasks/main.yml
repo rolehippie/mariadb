@@ -6,6 +6,28 @@
   file:
     path: "{{ item }}"
     state: directory
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  tags:
+    - mariadb
+
+- name: Download repo key
+  when: mariadb_upstream_repo
+  apt_key:
+    url: https://mariadb.org/mariadb_release_signing_key.asc
+    id: 177F4010FE56CA3336300305F1656F24C74CD1D8
+    state: present
+  tags:
+    - mariadb
+
+- name: Add apt repository
+  when: mariadb_upstream_repo
+  apt_repository:
+    repo: "deb [arch=amd64] https://mirror.netcologne.de/mariadb/repo/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
+    filename: mariadb
+    update_cache: True
+    state: present
   tags:
     - mariadb
 
@@ -29,6 +51,7 @@
     - mariadb
 
 - name: Fix data permissions
+  when: not ansible_check_mode
   file:
     path: /var/lib/mysql
     owner: mysql
@@ -65,12 +88,28 @@
   tags:
     - mariadb
 
+- name: Write galera config
+  when: mariadb_galera_enabled
+  notify:
+    - Restart mariadb
+  template:
+    src: galera.j2
+    dest: /etc/mysql/mariadb.conf.d/60-galera.cnf
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  tags:
+    - mariadb
+
 - name: Write override config
   notify:
     - Restart mariadb
   template:
     src: config.j2
     dest: /etc/mysql/mariadb.conf.d/99-override.cnf
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - mariadb
 
@@ -80,10 +119,14 @@
   template:
     src: override.j2
     dest: /etc/systemd/system/mariadb.service.d/override.conf
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - mariadb
 
 - name: Start mariadb service
+  ignore_errors: "{{ ansible_check_mode }}"
   systemd:
     name: mariadb
     state: started
@@ -94,7 +137,8 @@
     - mariadb
 
 - name: Update root account
-  no_log: True
+  when: not ansible_check_mode
+  diff: False
   loop: "{{ mariadb_root_hosts }}"
   mysql_user:
     name: "{{ mariadb_root_username }}"
@@ -104,6 +148,7 @@
     login_unix_socket: /var/run/mysqld/mysqld.sock
     login_user: "{{ mariadb_root_username }}"
     login_password: "{{ mariadb_root_password }}"
+    priv: '*.*:ALL,GRANT'
     state: present
   tags:
     - mariadb
@@ -129,7 +174,8 @@
     - mariadb
 
 - name: Remove anonymous user
-  no_log: True
+  when: not ansible_check_mode
+  diff: False
   mysql_user:
     name: ""
     host_all: True
@@ -139,6 +185,7 @@
     - mariadb
 
 - name: Remove test database
+  when: not ansible_check_mode
   mysql_db:
     name: test
     state: absent
@@ -146,7 +193,15 @@
   tags:
     - mariadb
 
+- name: Include galera tasks
+  when: mariadb_galera_enabled | default(False)
+  include: galera.yml
+  tags:
+    - mariadb
+
 - name: Create defined databases
+  delegate_to: "{{ mariadb_galera_primary if mariadb_galera_enabled else omit }}"
+  when: not ansible_check_mode
   loop: "{{ mariadb_global_databases + mariadb_extra_databases }}"
   loop_control:
     label: "{{ item.name }}"
@@ -160,7 +215,9 @@
     - mariadb
 
 - name: Create defined users
-  no_log: True
+  delegate_to: "{{ mariadb_galera_primary if mariadb_galera_enabled else omit }}"
+  when: not ansible_check_mode
+  diff: False
   loop: "{{ mariadb_global_users + mariadb_extra_users }}"
   loop_control:
     label: "{{ item.name }}"

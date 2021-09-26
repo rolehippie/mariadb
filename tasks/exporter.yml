@@ -46,6 +46,9 @@
   template:
     src: exporter/default.j2
     dest: /etc/default/mariadb-exporter
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - mariadb-exporter
 
@@ -55,10 +58,14 @@
   template:
     src: exporter/service.j2
     dest: /etc/systemd/system/mariadb-exporter.service
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - mariadb-exporter
 
 - name: Start mariadb-exporter service
+  ignore_errors: "{{ ansible_check_mode }}"
   systemd:
     name: mariadb-exporter
     state: started

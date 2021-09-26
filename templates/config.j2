@@ -1,15 +1,35 @@
 [mysqld]
 bind-address = {{ mariadb_bind_address }}
+
 max_allowed_packet = {{ mariadb_max_allowed_packet }}
 max_connections = {{ mariadb_max_connections }}
 {% if mariadb_ignore_db_dirs | default(False) %}
+
 {% for item in mariadb_ignore_db_dirs %}
 ignore_db_dirs = {{ item }}
 {% endfor %}
 {% endif %}
 {% if mariadb_temp_directory | default(False) %}
+
 tmpdir = {{ mariadb_temp_directory }}
 {% endif %}
+{% if mariadb_skip_name_resolve %}
+
+skip-name-resolve
+{% endif %}
+
+innodb-buffer-pool-size={{ mariadb_innodb_buffer_pool_size }}
+innodb-buffer-pool-instances={{ mariadb_innodb_buffer_pool_instances }}
+innodb_file_per_table={{ mariadb_innodb_file_per_table }}
+innodb-flush-log-at-trx-commit={{ mariadb_innodb_flush_log_at_trx_commit }}
+innodb-max-dirty-pages-pct={{ mariadb_innodb_max_dirty_pages_pct }}
+innodb-io-capacity={{ mariadb_innodb_io_capacity }}
+
+key-buffer-size={{ mariadb_key_buffer_size }}
+
+query-cache-type={{ mariadb_query_cache_type }}
+query-cache-size={{ mariadb_query_cache_size }}
+symbolic-links={{ mariadb_symbolic_links }}
 
 [mariadb]
 lower_case_table_names = {{ mariadb_lower_case_table_names }}

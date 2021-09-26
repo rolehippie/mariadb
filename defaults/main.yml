@@ -1,5 +1,11 @@
 # Standards: 1.2
 ---
+# @var mariadb_upstream_repo:description: Install from upstream repository
+mariadb_upstream_repo: True
+
+# @var mariadb_upstream_version:description: Upstream repo version
+mariadb_upstream_version: 10.6
+
 # @var mariadb_packages:description: List of packages to install
 mariadb_packages:
   - mariadb-server
@@ -7,6 +13,7 @@ mariadb_packages:
   - mariadb-backup
   - mycli
   - python3-pymysql
+  - rsync
 
 # @var mariadb_bind_address:description: Bind address for the server
 mariadb_bind_address: 0.0.0.0
@@ -16,6 +23,39 @@ mariadb_ignore_db_dirs: []
 
 # @var mariadb_temp_directory:description: Temporary directory used by MariaDB
 mariadb_temp_directory:
+
+# @var mariadb_skip_name_resolve:description: Skip name resolving
+mariadb_skip_name_resolve: True
+
+# @var mariadb_innodb_buffer_pool_size:description: InnoDB buffer pool size
+mariadb_innodb_buffer_pool_size: 256M
+
+# @var mariadb_innodb_buffer_pool_instances:description: InnoDB buffer pool instances
+mariadb_innodb_buffer_pool_instances: 1
+
+# @var mariadb_innodb_file_per_table:description: InnoDB file per table
+mariadb_innodb_file_per_table: 1
+
+# @var mariadb_innodb_flush_log_at_trx_commit:description: InnoDB flush at trx commit
+mariadb_innodb_flush_log_at_trx_commit: 1
+
+# @var mariadb_innodb_max_dirty_pages_pct:description: InnoDB max dirty pages percentage
+mariadb_innodb_max_dirty_pages_pct: 90
+
+# @var mariadb_innodb_io_capacity:description: InnoDB IO capacity
+mariadb_innodb_io_capacity: 1000
+
+# @var mariadb_key_buffer_size:description: Key buffer size
+mariadb_key_buffer_size: 32M
+
+# @var mariadb_query_cache_type:description: Query cache type
+mariadb_query_cache_type: 0
+
+# @var mariadb_query_cache_size:description: Query cache size
+mariadb_query_cache_size: 0
+
+# @var mariadb_symbolic_links:description: Symbolic links
+mariadb_symbolic_links: 0
 
 # @var mariadb_max_allowed_packet:description: Max allowed packet
 mariadb_max_allowed_packet: 64M
@@ -29,6 +69,30 @@ mariadb_lower_case_table_names: 0
 # @var mariadb_limit_number_files:description: Number of allowed open files for systemd service
 mariadb_limit_number_files: 32768
 
+# @var mariadb_oom_score_adjust:description: Adjustment score for OOM killer
+mariadb_oom_score_adjust: -999
+
+# @var mariadb_timeout_start_sec:description: Time to wait for daemon startup
+mariadb_timeout_start_sec: 120
+
+# @var mariadb_galera_enabled:description: Enable galera clustering
+mariadb_galera_enabled: False
+
+# @var mariadb_galera_primary:description: Inventory of primary galera node
+mariadb_galera_primary:
+
+# @var mariadb_galera_name:description: Name of the galera cluster
+mariadb_galera_cluster: galera
+
+# @var mariadb_galera_nodes:description: Node addresses part of galera cluster
+mariadb_galera_nodes: []
+
+# @var mariadb_galera_address:description: Node address within galera cluster
+mariadb_galera_address: "{{ ansible_address }}"
+
+# @var mariadb_galera_name:description: Node name within galera cluster
+mariadb_galera_name: "{{ inventory_hostname }}"
+
 # @var mariadb_root_username:description: Username for the root user
 mariadb_root_username: root
 
@@ -38,6 +102,7 @@ mariadb_root_password: root
 # @var mariadb_root_hosts:description: Allowed hosts for root user
 mariadb_root_hosts:
   - localhost
+  - 127.0.0.1
 
 # @var mariadb_global_databases:description: List of databases to create
 # @var mariadb_global_databases:example: >

@@ -1,0 +1,14 @@
+[galera]
+wsrep_on = 1
+wsrep_provider = /usr/lib/galera/libgalera_smm.so
+wsrep_cluster_name = {{ mariadb_galera_cluster }}
+wsrep_cluster_address = gcomm://{{ mariadb_galera_nodes | join(',') }}
+wsrep_sst_method = rsync
+wsrep_node_address = {{ mariadb_galera_address }}
+wsrep_node_name = {{ mariadb_galera_name }}
+
+bind-address = {{ mariadb_bind_address }}
+
+binlog_format = row
+default-storage-engine = innodb
+innodb_autoinc_lock_mode = 2

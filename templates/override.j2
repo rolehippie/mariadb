@@ -1,2 +1,8 @@
 [Service]
 LimitNOFILE={{ mariadb_limit_number_files }}
+{% if mariadb_oom_score_adjust | default(False) %}
+OOMScoreAdjust={{ mariadb_oom_score_adjust }}
+{% endif %}
+{% if mariadb_timeout_start_sec | default(False) %}
+TimeoutStartSec={{ mariadb_timeout_start_sec }}
+{% endif %}
