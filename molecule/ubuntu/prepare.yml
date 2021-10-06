@@ -18,4 +18,5 @@
         name: python3-gpg
         state: present
         update_cache: true
+
 ...
