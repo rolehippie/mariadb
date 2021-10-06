@@ -13,4 +13,9 @@
       apt:
         update_cache: True
 
+    - name: dependency for apt_key
+      apt:
+        name: python3-gpg
+        state: present
+        update_cache: true
 ...
