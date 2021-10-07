@@ -24,7 +24,7 @@
 - name: Add apt repository
   when: mariadb_upstream_repo
   apt_repository:
-    repo: "deb [arch=amd64] https://mirror.netcologne.de/mariadb/repo/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
+    repo: "deb [arch={{ mariadb_upstream_arches | join(',') }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
     filename: mariadb
     update_cache: True
     state: present
