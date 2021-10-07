@@ -60,6 +60,8 @@ Building and improving this Ansible role have been sponsored by my employer **Pr
   * [mariadb_symbolic_links](#mariadb_symbolic_links)
   * [mariadb_temp_directory](#mariadb_temp_directory)
   * [mariadb_timeout_start_sec](#mariadb_timeout_start_sec)
+  * [mariadb_upstream_arches](#mariadb_upstream_arches)
+  * [mariadb_upstream_mirror](#mariadb_upstream_mirror)
   * [mariadb_upstream_repo](#mariadb_upstream_repo)
   * [mariadb_upstream_version](#mariadb_upstream_version)
 * [Dependencies](#dependencies)
@@ -609,6 +611,27 @@ Time to wait for daemon startup
 
 ```YAML
 mariadb_timeout_start_sec: 120
+```
+
+### mariadb_upstream_arches
+
+Upstream repo architectures
+
+#### Default value
+
+```YAML
+mariadb_upstream_arches:
+  - amd64
+```
+
+### mariadb_upstream_mirror
+
+Upstream repo mirror URL
+
+#### Default value
+
+```YAML
+mariadb_upstream_mirror: http://mirror.23m.com/mariadb/repo
 ```
 
 ### mariadb_upstream_repo
