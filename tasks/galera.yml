@@ -2,7 +2,7 @@
 ---
 - name: Check galera status
   register: mariadb_galera_status
-  delegate_to: "{{ mariadb_galera_primary }}"
+  delegate_to: "{{ mariadb_galera_primary | default('dummy') }}"
   run_once: True
   mysql_info:
     filter: settings
