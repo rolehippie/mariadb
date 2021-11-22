@@ -5,13 +5,13 @@
   failed_when: False
   changed_when: False
   check_mode: False
-  command: /usr/bin/mariadb-exporter --version
+  shell: /usr/bin/mariadb-exporter --version 2>&1
   tags:
     - mariadb-exporter
 
 - name: Fact version change
   set_fact:
-    mariadb_exporter_version_changed: "{{ mariadb_exporter_version_check.rc != 0 or (mariadb_exporter_version_check.stderr_lines is defined and mariadb_exporter_version not in mariadb_exporter_version_check.stderr_lines[0]) | bool }}"
+    mariadb_exporter_version_changed: "{{ mariadb_exporter_version_check.rc != 0 or (mariadb_exporter_version_check.stdout_lines is defined and mariadb_exporter_version not in mariadb_exporter_version_check.stdout_lines[0]) | bool }}"
   tags:
     - mariadb-exporter
 
