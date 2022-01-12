@@ -195,7 +195,7 @@
 
 - name: Include galera tasks
   when: mariadb_galera_enabled | default(False)
-  include: galera.yml
+  include_tasks: galera.yml
   tags:
     - mariadb
 
@@ -263,7 +263,7 @@
 
 - name: Include exporter tasks
   when: mariadb_exporter_enabled | default(False)
-  include: exporter.yml
+  include_tasks: exporter.yml
   tags:
     - mariadb
     - mariadb-exporter
