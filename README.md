@@ -1,72 +1,73 @@
 # mariadb
 
-[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/rolehippie/mariadb) [![Testing Build](https://github.com/rolehippie/mariadb/workflows/testing/badge.svg)](https://github.com/rolehippie/mariadb/actions?query=workflow%3Atesting) [![Readme Build](https://github.com/rolehippie/mariadb/workflows/readme/badge.svg)](https://github.com/rolehippie/mariadb/actions?query=workflow%3Areadme) [![Galaxy Build](https://github.com/rolehippie/mariadb/workflows/galaxy/badge.svg)](https://github.com/rolehippie/mariadb/actions?query=workflow%3Agalaxy) [![License: Apache-2.0](https://img.shields.io/github/license/rolehippie/mariadb)](https://github.com/rolehippie/mariadb/blob/master/LICENSE) 
+[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/rolehippie/mariadb) [![Testing Build](https://github.com/rolehippie/mariadb/workflows/testing/badge.svg)](https://github.com/rolehippie/mariadb/actions?query=workflow%3Atesting) [![Readme Build](https://github.com/rolehippie/mariadb/workflows/readme/badge.svg)](https://github.com/rolehippie/mariadb/actions?query=workflow%3Areadme) [![Galaxy Build](https://github.com/rolehippie/mariadb/workflows/galaxy/badge.svg)](https://github.com/rolehippie/mariadb/actions?query=workflow%3Agalaxy) [![License: Apache-2.0](https://img.shields.io/github/license/rolehippie/mariadb)](https://github.com/rolehippie/mariadb/blob/master/LICENSE)
 
-Ansible role to install and configure a simple MariaDB. 
+Ansible role to install and configure a simple MariaDB.
 
-## Sponsor 
+## Sponsor
 
-[![Proact Deutschland GmbH](https://proact.eu/wp-content/uploads/2020/03/proact-logo.png)](https://proact.eu) 
+[![Proact Deutschland GmbH](https://proact.eu/wp-content/uploads/2020/03/proact-logo.png)](https://proact.eu)
 
 Building and improving this Ansible role have been sponsored by my employer **Proact Deutschland GmbH**.
 
 ## Table of content
 
-* [Default Variables](#default-variables)
-  * [mariadb_backup_addition_script](#mariadb_backup_addition_script)
-  * [mariadb_backup_cron](#mariadb_backup_cron)
-  * [mariadb_backup_enabled](#mariadb_backup_enabled)
-  * [mariadb_backup_formatting](#mariadb_backup_formatting)
-  * [mariadb_backup_ignore](#mariadb_backup_ignore)
-  * [mariadb_backup_path](#mariadb_backup_path)
-  * [mariadb_backup_retention](#mariadb_backup_retention)
-  * [mariadb_bind_address](#mariadb_bind_address)
-  * [mariadb_exporter_args](#mariadb_exporter_args)
-  * [mariadb_exporter_collect_info_schema_tables](#mariadb_exporter_collect_info_schema_tables)
-  * [mariadb_exporter_download](#mariadb_exporter_download)
-  * [mariadb_exporter_enabled](#mariadb_exporter_enabled)
-  * [mariadb_exporter_version](#mariadb_exporter_version)
-  * [mariadb_extra_configs](#mariadb_extra_configs)
-  * [mariadb_extra_databases](#mariadb_extra_databases)
-  * [mariadb_extra_users](#mariadb_extra_users)
-  * [mariadb_galera_address](#mariadb_galera_address)
-  * [mariadb_galera_cluster](#mariadb_galera_cluster)
-  * [mariadb_galera_enabled](#mariadb_galera_enabled)
-  * [mariadb_galera_name](#mariadb_galera_name)
-  * [mariadb_galera_nodes](#mariadb_galera_nodes)
-  * [mariadb_galera_primary](#mariadb_galera_primary)
-  * [mariadb_global_databases](#mariadb_global_databases)
-  * [mariadb_global_users](#mariadb_global_users)
-  * [mariadb_ignore_db_dirs](#mariadb_ignore_db_dirs)
-  * [mariadb_innodb_buffer_pool_instances](#mariadb_innodb_buffer_pool_instances)
-  * [mariadb_innodb_buffer_pool_size](#mariadb_innodb_buffer_pool_size)
-  * [mariadb_innodb_file_per_table](#mariadb_innodb_file_per_table)
-  * [mariadb_innodb_flush_log_at_trx_commit](#mariadb_innodb_flush_log_at_trx_commit)
-  * [mariadb_innodb_io_capacity](#mariadb_innodb_io_capacity)
-  * [mariadb_innodb_max_dirty_pages_pct](#mariadb_innodb_max_dirty_pages_pct)
-  * [mariadb_key_buffer_size](#mariadb_key_buffer_size)
-  * [mariadb_limit_number_files](#mariadb_limit_number_files)
-  * [mariadb_lower_case_table_names](#mariadb_lower_case_table_names)
-  * [mariadb_max_allowed_packet](#mariadb_max_allowed_packet)
-  * [mariadb_max_connections](#mariadb_max_connections)
-  * [mariadb_oom_score_adjust](#mariadb_oom_score_adjust)
-  * [mariadb_packages](#mariadb_packages)
-  * [mariadb_query_cache_size](#mariadb_query_cache_size)
-  * [mariadb_query_cache_type](#mariadb_query_cache_type)
-  * [mariadb_root_hosts](#mariadb_root_hosts)
-  * [mariadb_root_password](#mariadb_root_password)
-  * [mariadb_root_username](#mariadb_root_username)
-  * [mariadb_skip_name_resolve](#mariadb_skip_name_resolve)
-  * [mariadb_symbolic_links](#mariadb_symbolic_links)
-  * [mariadb_temp_directory](#mariadb_temp_directory)
-  * [mariadb_timeout_start_sec](#mariadb_timeout_start_sec)
-  * [mariadb_upstream_arches](#mariadb_upstream_arches)
-  * [mariadb_upstream_mirror](#mariadb_upstream_mirror)
-  * [mariadb_upstream_repo](#mariadb_upstream_repo)
-  * [mariadb_upstream_version](#mariadb_upstream_version)
-* [Dependencies](#dependencies)
-* [License](#license)
-* [Author](#author)
+- [Default Variables](#default-variables)
+  - [mariadb_backup_addition_script](#mariadb_backup_addition_script)
+  - [mariadb_backup_cron](#mariadb_backup_cron)
+  - [mariadb_backup_enabled](#mariadb_backup_enabled)
+  - [mariadb_backup_formatting](#mariadb_backup_formatting)
+  - [mariadb_backup_ignore](#mariadb_backup_ignore)
+  - [mariadb_backup_path](#mariadb_backup_path)
+  - [mariadb_backup_retention](#mariadb_backup_retention)
+  - [mariadb_bind_address](#mariadb_bind_address)
+  - [mariadb_exporter_args](#mariadb_exporter_args)
+  - [mariadb_exporter_collect_info_schema_tables](#mariadb_exporter_collect_info_schema_tables)
+  - [mariadb_exporter_download](#mariadb_exporter_download)
+  - [mariadb_exporter_enabled](#mariadb_exporter_enabled)
+  - [mariadb_exporter_version](#mariadb_exporter_version)
+  - [mariadb_extra_configs](#mariadb_extra_configs)
+  - [mariadb_extra_databases](#mariadb_extra_databases)
+  - [mariadb_extra_users](#mariadb_extra_users)
+  - [mariadb_galera_address](#mariadb_galera_address)
+  - [mariadb_galera_cluster](#mariadb_galera_cluster)
+  - [mariadb_galera_enabled](#mariadb_galera_enabled)
+  - [mariadb_galera_name](#mariadb_galera_name)
+  - [mariadb_galera_nodes](#mariadb_galera_nodes)
+  - [mariadb_galera_primary](#mariadb_galera_primary)
+  - [mariadb_global_databases](#mariadb_global_databases)
+  - [mariadb_global_users](#mariadb_global_users)
+  - [mariadb_ignore_db_dirs](#mariadb_ignore_db_dirs)
+  - [mariadb_innodb_buffer_pool_instances](#mariadb_innodb_buffer_pool_instances)
+  - [mariadb_innodb_buffer_pool_size](#mariadb_innodb_buffer_pool_size)
+  - [mariadb_innodb_file_per_table](#mariadb_innodb_file_per_table)
+  - [mariadb_innodb_flush_log_at_trx_commit](#mariadb_innodb_flush_log_at_trx_commit)
+  - [mariadb_innodb_io_capacity](#mariadb_innodb_io_capacity)
+  - [mariadb_innodb_max_dirty_pages_pct](#mariadb_innodb_max_dirty_pages_pct)
+  - [mariadb_key_buffer_size](#mariadb_key_buffer_size)
+  - [mariadb_limit_number_files](#mariadb_limit_number_files)
+  - [mariadb_lower_case_table_names](#mariadb_lower_case_table_names)
+  - [mariadb_max_allowed_packet](#mariadb_max_allowed_packet)
+  - [mariadb_max_connections](#mariadb_max_connections)
+  - [mariadb_oom_score_adjust](#mariadb_oom_score_adjust)
+  - [mariadb_packages](#mariadb_packages)
+  - [mariadb_query_cache_size](#mariadb_query_cache_size)
+  - [mariadb_query_cache_type](#mariadb_query_cache_type)
+  - [mariadb_root_hosts](#mariadb_root_hosts)
+  - [mariadb_root_password](#mariadb_root_password)
+  - [mariadb_root_username](#mariadb_root_username)
+  - [mariadb_skip_name_resolve](#mariadb_skip_name_resolve)
+  - [mariadb_symbolic_links](#mariadb_symbolic_links)
+  - [mariadb_temp_directory](#mariadb_temp_directory)
+  - [mariadb_timeout_start_sec](#mariadb_timeout_start_sec)
+  - [mariadb_upstream_arches](#mariadb_upstream_arches)
+  - [mariadb_upstream_mirror](#mariadb_upstream_mirror)
+  - [mariadb_upstream_repo](#mariadb_upstream_repo)
+  - [mariadb_upstream_version](#mariadb_upstream_version)
+- [Discovered Tags](#discovered-tags)
+- [Dependencies](#dependencies)
+- [License](#license)
+- [Author](#author)
 
 ---
 
@@ -200,7 +201,7 @@ Version of the release to install
 #### Default value
 
 ```YAML
-mariadb_exporter_version: 0.12.1
+mariadb_exporter_version: 0.14.0
 ```
 
 ### mariadb_extra_configs
@@ -654,9 +655,16 @@ Upstream repo version
 mariadb_upstream_version: 10.6
 ```
 
+## Discovered Tags
+
+**_mariadb_**
+
+**_mariadb-exporter_**
+
+
 ## Dependencies
 
-* [rolehippie.docker](https://github.com/rolehippie/docker)
+- [rolehippie.docker](https://github.com/rolehippie/docker)
 
 ## License
 
