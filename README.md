@@ -49,6 +49,7 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_innodb_io_capacity](#mariadb_innodb_io_capacity)
   - [mariadb_innodb_max_dirty_pages_pct](#mariadb_innodb_max_dirty_pages_pct)
   - [mariadb_key_buffer_size](#mariadb_key_buffer_size)
+  - [mariadb_keyring](#mariadb_keyring)
   - [mariadb_limit_number_files](#mariadb_limit_number_files)
   - [mariadb_lower_case_table_names](#mariadb_lower_case_table_names)
   - [mariadb_max_allowed_packet](#mariadb_max_allowed_packet)
@@ -64,7 +65,7 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_symbolic_links](#mariadb_symbolic_links)
   - [mariadb_temp_directory](#mariadb_temp_directory)
   - [mariadb_timeout_start_sec](#mariadb_timeout_start_sec)
-  - [mariadb_upstream_arches](#mariadb_upstream_arches)
+  - [mariadb_upstream_arch](#mariadb_upstream_arch)
   - [mariadb_upstream_mirror](#mariadb_upstream_mirror)
   - [mariadb_upstream_repo](#mariadb_upstream_repo)
   - [mariadb_upstream_version](#mariadb_upstream_version)
@@ -465,6 +466,16 @@ Key buffer size
 mariadb_key_buffer_size: 32M
 ```
 
+### mariadb_keyring
+
+Path for the repository keyring
+
+#### Default value
+
+```YAML
+mariadb_keyring: /usr/share/keyrings/mariadb-archive-keyring.gpg
+```
+
 ### mariadb_limit_number_files
 
 Number of allowed open files for systemd service
@@ -623,15 +634,15 @@ Time to wait for daemon startup
 mariadb_timeout_start_sec: 120
 ```
 
-### mariadb_upstream_arches
+### mariadb_upstream_arch
 
-Upstream repo architectures
+Upstream repo architecture
 
 #### Default value
 
 ```YAML
-mariadb_upstream_arches:
-  - amd64
+mariadb_upstream_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64'\
+  \ }}"
 ```
 
 ### mariadb_upstream_mirror
