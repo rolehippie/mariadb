@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/rolehippie/mariadb/compare/v1.0.0...v1.1.0) (2023-04-17)
+
+
+### Features
+
+* use unified path for repo key and drop legacy key ([7e99834](https://github.com/rolehippie/mariadb/commit/7e998340b514468431754f23f7042c18257a5d4a))
+
 ## 1.0.0 (2023-01-05)
 
 
