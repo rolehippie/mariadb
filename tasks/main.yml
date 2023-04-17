@@ -1,5 +1,37 @@
 # Standards: 1.2
 ---
+- name: Remove legacy key
+  apt_key:
+    id: 177F4010FE56CA3336300305F1656F24C74CD1D8
+    state: absent
+  tags:
+    - mariadb
+
+- name: Remove legacy repo
+  apt_repository:
+    repo: "deb [arch={{ mariadb_upstream_arch }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
+    filename: mariadb
+    update_cache: False
+    state: absent
+  tags:
+    - mariadb
+
+- name: Download repo key
+  shell:
+    cmd: "curl -sSL 'https://mariadb.org/mariadb_release_signing_key.asc' | gpg --dearmor --output {{ mariadb_keyring }}"
+    creates: "{{ mariadb_keyring }}"
+  tags:
+    - mariadb
+
+- name: Add apt repository
+  apt_repository:
+    repo: "deb [arch={{ mariadb_upstream_arch }} signed-by={{ mariadb_keyring }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
+    filename: mariadb
+    update_cache: True
+    state: present
+  tags:
+    - mariadb
+
 - name: Create required dirs
   loop:
     - /etc/systemd/system/mariadb.service.d
@@ -9,25 +41,6 @@
     owner: root
     group: root
     mode: u=rw,g=r,o=r
-  tags:
-    - mariadb
-
-- name: Download repo key
-  when: mariadb_upstream_repo
-  apt_key:
-    url: https://mariadb.org/mariadb_release_signing_key.asc
-    id: 177F4010FE56CA3336300305F1656F24C74CD1D8
-    state: present
-  tags:
-    - mariadb
-
-- name: Add apt repository
-  when: mariadb_upstream_repo
-  apt_repository:
-    repo: "deb [arch={{ mariadb_upstream_arches | join(',') }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
-    filename: mariadb
-    update_cache: True
-    state: present
   tags:
     - mariadb
 

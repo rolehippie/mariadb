@@ -9,9 +9,11 @@ mariadb_upstream_version: 10.6
 # @var mariadb_upstream_mirror:description: Upstream repo mirror URL
 mariadb_upstream_mirror: http://mirror.23m.com/mariadb/repo
 
-# @var mariadb_upstream_arches:description: Upstream repo architectures
-mariadb_upstream_arches:
-  - amd64
+# @var mariadb_upstream_arch:description: Upstream repo architecture
+mariadb_upstream_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+
+# @var mariadb_keyring:description: Path for the repository keyring
+mariadb_keyring: /usr/share/keyrings/mariadb-archive-keyring.gpg
 
 # @var mariadb_packages:description: List of packages to install
 mariadb_packages:
