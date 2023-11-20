@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/rolehippie/mariadb/compare/v1.2.0...v1.3.0) (2023-11-20)
+
+
+### Features
+
+* integrate docker deployment and upgrade to 11.1 ([3977fad](https://github.com/rolehippie/mariadb/commit/3977fad256f0467ef67eb986c57517117331c52f))
+
 ## [1.2.0](https://github.com/rolehippie/mariadb/compare/v1.1.0...v1.2.0) (2023-06-26)
 
 
