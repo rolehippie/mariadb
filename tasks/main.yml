@@ -1,6 +1,8 @@
 # Standards: 1.2
 ---
 - name: Remove legacy key
+  when:
+    - mariadb_installation == 'native'
   apt_key:
     id: 177F4010FE56CA3336300305F1656F24C74CD1D8
     state: absent
@@ -8,6 +10,8 @@
     - mariadb
 
 - name: Remove legacy repo
+  when:
+    - mariadb_installation == 'native'
   apt_repository:
     repo: "deb [arch={{ mariadb_upstream_arch }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
     filename: mariadb
@@ -17,6 +21,8 @@
     - mariadb
 
 - name: Download repo key
+  when:
+    - mariadb_installation == 'native'
   shell:
     cmd: "curl -sSL 'https://mariadb.org/mariadb_release_signing_key.asc' | gpg --dearmor --output {{ mariadb_keyring }}"
     creates: "{{ mariadb_keyring }}"
@@ -24,6 +30,8 @@
     - mariadb
 
 - name: Add apt repository
+  when:
+    - mariadb_installation == 'native'
   apt_repository:
     repo: "deb [arch={{ mariadb_upstream_arch }} signed-by={{ mariadb_keyring }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
     filename: mariadb
@@ -33,18 +41,19 @@
     - mariadb
 
 - name: Create required dirs
-  loop:
-    - /etc/systemd/system/mariadb.service.d
+  loop: "{{ mariadb_default_folders + mariadb_extra_folders }}"
   file:
     path: "{{ item }}"
-    state: directory
     owner: root
     group: root
     mode: u=rw,g=r,o=r
+    state: directory
   tags:
     - mariadb
 
 - name: Install required packages
+  when:
+    - mariadb_installation == 'native'
   loop: "{{ mariadb_packages }}"
   package:
     name: "{{ item }}"
@@ -53,7 +62,9 @@
     - mariadb
 
 - name: Create temp directory
-  when: mariadb_temp_directory | default(False)
+  when:
+    - mariadb_installation == 'native'
+    - mariadb_temp_directory | default(False)
   file:
     path: "{{ mariadb_temp_directory }}"
     owner: root
@@ -64,11 +75,14 @@
     - mariadb
 
 - name: Fix data permissions
-  when: not ansible_check_mode
+  when:
+    - not ansible_check_mode
   file:
     path: /var/lib/mysql
-    owner: mysql
-    group: mysql
+    owner: "{{ 'mysql' if mariadb_installation == 'native' else '999' }}"
+    group: "{{ 'mysql' if mariadb_installation == 'native' else '999' }}"
+    mode: u=rwx,g=rx,o=rx
+    state: directory
   tags:
     - mariadb
 
@@ -76,7 +90,8 @@
   loop: "{{ mariadb_extra_configs }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default("present") == "present"
+  when:
+    - item.state | default("present") == "present"
   notify:
     - Restart mariadb
   copy:
@@ -92,7 +107,8 @@
   loop: "{{ mariadb_extra_configs }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default("present") == "absent"
+  when:
+    - item.state | default("present") == "absent"
   notify:
     - Restart mariadb
   file:
@@ -102,7 +118,9 @@
     - mariadb
 
 - name: Write galera config
-  when: mariadb_galera_enabled
+  when:
+    - mariadb_installation == 'native'
+    - mariadb_galera_enabled
   notify:
     - Restart mariadb
   template:
@@ -115,6 +133,8 @@
     - mariadb
 
 - name: Write override config
+  when:
+    - mariadb_installation == 'native'
   notify:
     - Restart mariadb
   template:
@@ -127,6 +147,8 @@
     - mariadb
 
 - name: Write service override
+  when:
+    - mariadb_installation == 'native'
   notify:
     - Restart mariadb
   template:
@@ -135,6 +157,53 @@
     owner: root
     group: root
     mode: u=rw,g=r,o=r
+  tags:
+    - mariadb
+
+- name: Write default config
+  when:
+    - mariadb_installation == 'docker'
+  notify:
+    - Restart mariadb
+  template:
+    src: default.j2
+    dest: /etc/default/mariadb
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  tags:
+    - mariadb
+
+- name: Write service file
+  when:
+    - mariadb_installation == 'docker'
+  notify:
+    - Restart mariadb
+  template:
+    src: service.j2
+    dest: /etc/systemd/system/mariadb.service
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  tags:
+    - mariadb
+
+- name: Pull docker image
+  when:
+    - mariadb_installation == 'docker'
+    - mariadb_pull_image
+  docker_image:
+    name: "{{ mariadb_image }}"
+    source: pull
+  tags:
+    - mariadb
+
+- name: Create docker network
+  when:
+    - mariadb_installation == 'docker'
+    - mariadb_network | default(False)
+  docker_network:
+    name: '{{ mariadb_network }}'
   tags:
     - mariadb
 
@@ -150,7 +219,9 @@
     - mariadb
 
 - name: Update root account
-  when: not ansible_check_mode
+  when:
+    - mariadb_installation == 'native'
+    - not ansible_check_mode
   diff: False
   loop: "{{ mariadb_root_hosts }}"
   mysql_user:
@@ -167,6 +238,8 @@
     - mariadb
 
 - name: Write debian config
+  when:
+    - mariadb_installation == 'native'
   template:
     src: debian.j2
     dest: /etc/mysql/debian.cnf
@@ -177,6 +250,8 @@
     - mariadb
 
 - name: Write auth config
+  when:
+    - mariadb_installation == 'native'
   template:
     src: auth.j2
     dest: /root/.my.cnf
@@ -187,7 +262,9 @@
     - mariadb
 
 - name: Remove anonymous user
-  when: not ansible_check_mode
+  when:
+    - mariadb_installation == 'native'
+    - not ansible_check_mode
   diff: False
   mysql_user:
     name: ""
@@ -198,7 +275,9 @@
     - mariadb
 
 - name: Remove test database
-  when: not ansible_check_mode
+  when:
+    - mariadb_installation == 'native'
+    - not ansible_check_mode
   mysql_db:
     name: test
     state: absent
@@ -207,14 +286,18 @@
     - mariadb
 
 - name: Include galera tasks
-  when: mariadb_galera_enabled | default(False)
+  when:
+    - mariadb_installation == 'native'
+    - mariadb_galera_enabled | default(False)
   include_tasks: galera.yml
   tags:
     - mariadb
 
 - name: Create defined databases
   delegate_to: "{{ mariadb_galera_primary if mariadb_galera_enabled else inventory_hostname }}"
-  when: not ansible_check_mode
+  when:
+    - mariadb_installation == 'native'
+    - not ansible_check_mode
   loop: "{{ mariadb_global_databases + mariadb_extra_databases }}"
   loop_control:
     label: "{{ item.name }}"
@@ -229,7 +312,9 @@
 
 - name: Create defined users
   delegate_to: "{{ mariadb_galera_primary if mariadb_galera_enabled else inventory_hostname }}"
-  when: not ansible_check_mode
+  when:
+    - mariadb_installation == 'native'
+    - not ansible_check_mode
   diff: False
   loop: "{{ mariadb_global_users + mariadb_extra_users }}"
   loop_control:

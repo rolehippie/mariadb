@@ -1,1 +1,4 @@
-ARGS="--config.my-cnf=/root/.my.cnf{{ ' --collect.info_schema.tables' if mariadb_exporter_collect_info_schema_tables else '' }}{{ ' ' + mariadb_exporter_args | join(' ') if mariadb_exporter_args | default(False) else '' }}"
+ARGS="{% if mariadb_installation == "native" %}--config.my-cnf=/root/.my.cnf{% else %}--mysqld.address=mariadb:3306 --mysqld.username=root{% endif %}{{ ' --collect.info_schema.tables' if mariadb_exporter_collect_info_schema_tables else '' }}{{ ' ' + mariadb_exporter_args | join(' ') if mariadb_exporter_args | default(False) else '' }}"
+{% if mariadb_installation == "docker" %}
+MYSQLD_EXPORTER_PASSWORD={{ mariadb_root_password }}
+{% endif %}
