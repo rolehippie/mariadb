@@ -25,14 +25,36 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_backup_path](#mariadb_backup_path)
   - [mariadb_backup_retention](#mariadb_backup_retention)
   - [mariadb_bind_address](#mariadb_bind_address)
+  - [mariadb_cpu_shares](#mariadb_cpu_shares)
+  - [mariadb_database](#mariadb_database)
+  - [mariadb_default_folders](#mariadb_default_folders)
+  - [mariadb_default_labels](#mariadb_default_labels)
+  - [mariadb_default_publish](#mariadb_default_publish)
+  - [mariadb_default_volumes](#mariadb_default_volumes)
   - [mariadb_exporter_args](#mariadb_exporter_args)
   - [mariadb_exporter_collect_info_schema_tables](#mariadb_exporter_collect_info_schema_tables)
+  - [mariadb_exporter_cpu_shares](#mariadb_exporter_cpu_shares)
+  - [mariadb_exporter_default_labels](#mariadb_exporter_default_labels)
+  - [mariadb_exporter_default_publish](#mariadb_exporter_default_publish)
   - [mariadb_exporter_download](#mariadb_exporter_download)
   - [mariadb_exporter_enabled](#mariadb_exporter_enabled)
+  - [mariadb_exporter_extra_labels](#mariadb_exporter_extra_labels)
+  - [mariadb_exporter_extra_publish](#mariadb_exporter_extra_publish)
+  - [mariadb_exporter_image](#mariadb_exporter_image)
+  - [mariadb_exporter_memory_limit](#mariadb_exporter_memory_limit)
+  - [mariadb_exporter_memory_soft_limit](#mariadb_exporter_memory_soft_limit)
+  - [mariadb_exporter_memory_swap](#mariadb_exporter_memory_swap)
+  - [mariadb_exporter_network](#mariadb_exporter_network)
+  - [mariadb_exporter_number_of_cpus](#mariadb_exporter_number_of_cpus)
+  - [mariadb_exporter_pull_image](#mariadb_exporter_pull_image)
   - [mariadb_exporter_version](#mariadb_exporter_version)
   - [mariadb_extra_configs](#mariadb_extra_configs)
   - [mariadb_extra_databases](#mariadb_extra_databases)
+  - [mariadb_extra_folders](#mariadb_extra_folders)
+  - [mariadb_extra_labels](#mariadb_extra_labels)
+  - [mariadb_extra_publish](#mariadb_extra_publish)
   - [mariadb_extra_users](#mariadb_extra_users)
+  - [mariadb_extra_volumes](#mariadb_extra_volumes)
   - [mariadb_galera_address](#mariadb_galera_address)
   - [mariadb_galera_cluster](#mariadb_galera_cluster)
   - [mariadb_galera_enabled](#mariadb_galera_enabled)
@@ -42,20 +64,29 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_global_databases](#mariadb_global_databases)
   - [mariadb_global_users](#mariadb_global_users)
   - [mariadb_ignore_db_dirs](#mariadb_ignore_db_dirs)
+  - [mariadb_image](#mariadb_image)
   - [mariadb_innodb_buffer_pool_instances](#mariadb_innodb_buffer_pool_instances)
   - [mariadb_innodb_buffer_pool_size](#mariadb_innodb_buffer_pool_size)
   - [mariadb_innodb_file_per_table](#mariadb_innodb_file_per_table)
   - [mariadb_innodb_flush_log_at_trx_commit](#mariadb_innodb_flush_log_at_trx_commit)
   - [mariadb_innodb_io_capacity](#mariadb_innodb_io_capacity)
   - [mariadb_innodb_max_dirty_pages_pct](#mariadb_innodb_max_dirty_pages_pct)
+  - [mariadb_installation](#mariadb_installation)
   - [mariadb_key_buffer_size](#mariadb_key_buffer_size)
   - [mariadb_keyring](#mariadb_keyring)
   - [mariadb_limit_number_files](#mariadb_limit_number_files)
   - [mariadb_lower_case_table_names](#mariadb_lower_case_table_names)
   - [mariadb_max_allowed_packet](#mariadb_max_allowed_packet)
   - [mariadb_max_connections](#mariadb_max_connections)
+  - [mariadb_memory_limit](#mariadb_memory_limit)
+  - [mariadb_memory_soft_limit](#mariadb_memory_soft_limit)
+  - [mariadb_memory_swap](#mariadb_memory_swap)
+  - [mariadb_network](#mariadb_network)
+  - [mariadb_number_of_cpus](#mariadb_number_of_cpus)
   - [mariadb_oom_score_adjust](#mariadb_oom_score_adjust)
   - [mariadb_packages](#mariadb_packages)
+  - [mariadb_password](#mariadb_password)
+  - [mariadb_pull_image](#mariadb_pull_image)
   - [mariadb_query_cache_size](#mariadb_query_cache_size)
   - [mariadb_query_cache_type](#mariadb_query_cache_type)
   - [mariadb_root_hosts](#mariadb_root_hosts)
@@ -69,6 +100,7 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_upstream_mirror](#mariadb_upstream_mirror)
   - [mariadb_upstream_repo](#mariadb_upstream_repo)
   - [mariadb_upstream_version](#mariadb_upstream_version)
+  - [mariadb_username](#mariadb_username)
 - [Discovered Tags](#discovered-tags)
 - [Dependencies](#dependencies)
 - [License](#license)
@@ -129,7 +161,7 @@ Ignoring this filter via grep on database selection
 #### Default value
 
 ```YAML
-mariadb_backup_ignore: (_backup|mysql|information_schema|performance_schema)
+mariadb_backup_ignore: (_backup|mysql|sys|information_schema|performance_schema)
 ```
 
 ### mariadb_backup_path
@@ -162,6 +194,83 @@ Bind address for the server
 mariadb_bind_address: 0.0.0.0
 ```
 
+### mariadb_cpu_shares
+
+CPU shares with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_cpu_shares:
+```
+
+#### Example usage
+
+```YAML
+mariadb_cpu_shares: '512'
+```
+
+### mariadb_database
+
+Database used within docker deployment
+
+#### Default value
+
+```YAML
+mariadb_database:
+```
+
+### mariadb_default_folders
+
+List of default folders to create
+
+#### Default value
+
+```YAML
+mariadb_default_folders:
+  - /etc/systemd/system/mariadb.service.d
+  - /etc/mysql
+  - /etc/mysql/mariadb.conf.d
+```
+
+### mariadb_default_labels
+
+List of default labels to assign to docker
+
+#### Default value
+
+```YAML
+mariadb_default_labels: []
+```
+
+### mariadb_default_publish
+
+List of default port publishing for docker
+
+#### Default value
+
+```YAML
+mariadb_default_publish: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_default_publish:
+  - 127.0.0.1:3306:3306
+```
+
+### mariadb_default_volumes
+
+List of default volumes to mount for docker
+
+#### Default value
+
+```YAML
+mariadb_default_volumes:
+  - /var/lib/mysql:/var/lib/mysql
+```
+
 ### mariadb_exporter_args
 
 List of arguments joined for the executable
@@ -180,6 +289,49 @@ Enable info schema tables collector
 
 ```YAML
 mariadb_exporter_collect_info_schema_tables: true
+```
+
+### mariadb_exporter_cpu_shares
+
+CPU shares with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_exporter_cpu_shares:
+```
+
+#### Example usage
+
+```YAML
+mariadb_exporter_cpu_shares: '512'
+```
+
+### mariadb_exporter_default_labels
+
+List of default labels to assign to docker on OAuth2 Proxy
+
+#### Default value
+
+```YAML
+mariadb_exporter_default_labels: []
+```
+
+### mariadb_exporter_default_publish
+
+List of default port publishing for docker on OAuth2 Proxy
+
+#### Default value
+
+```YAML
+mariadb_exporter_default_publish: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_exporter_default_publish:
+  - 127.0.0.1:9104:9104
 ```
 
 ### mariadb_exporter_download
@@ -201,6 +353,127 @@ Enable the mariadb exporter
 
 ```YAML
 mariadb_exporter_enabled: true
+```
+
+### mariadb_exporter_extra_labels
+
+List of extra labels to assign to docker on OAuth2 Proxy
+
+#### Default value
+
+```YAML
+mariadb_exporter_extra_labels: []
+```
+
+### mariadb_exporter_extra_publish
+
+List of extra port publishing for docker on OAuth2 Proxy
+
+#### Default value
+
+```YAML
+mariadb_exporter_extra_publish: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_exporter_extra_publish:
+  - 127.0.0.1:9104:9104
+```
+
+### mariadb_exporter_image
+
+Docker image to use for deployment on OAuth2 Proxy
+
+#### Default value
+
+```YAML
+mariadb_exporter_image: prom/mysqld-exporter:v{{ mariadb_exporter_version }}
+```
+
+### mariadb_exporter_memory_limit
+
+Memory limit with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_exporter_memory_limit:
+```
+
+#### Example usage
+
+```YAML
+mariadb_exporter_memory_limit: 1024m
+```
+
+### mariadb_exporter_memory_soft_limit
+
+Soft memory limit with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_exporter_memory_soft_limit:
+```
+
+#### Example usage
+
+```YAML
+mariadb_exporter_memory_soft_limit: 512m
+```
+
+### mariadb_exporter_memory_swap
+
+Swap usage with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_exporter_memory_swap:
+```
+
+#### Example usage
+
+```YAML
+mariadb_exporter_memory_swap: 2048m
+```
+
+### mariadb_exporter_network
+
+Optional docker network to attach on OAuth2 Proxy
+
+#### Default value
+
+```YAML
+mariadb_exporter_network: '{{ mariadb_network }}'
+```
+
+### mariadb_exporter_number_of_cpus
+
+Number of CPUs with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_exporter_number_of_cpus:
+```
+
+#### Example usage
+
+```YAML
+mariadb_exporter_number_of_cpus: '1.5'
+```
+
+### mariadb_exporter_pull_image
+
+Pull image as part of the tasks
+
+#### Default value
+
+```YAML
+mariadb_exporter_pull_image: true
 ```
 
 ### mariadb_exporter_version
@@ -239,7 +512,7 @@ mariadb_extra_configs:
 
 ### mariadb_extra_databases
 
-List of additional databases to create
+List of additional databases to create for native installation
 
 #### Default value
 
@@ -259,9 +532,55 @@ mariadb_extra_databases:
     state: absent
 ```
 
+### mariadb_extra_folders
+
+List of extra folders to create
+
+#### Default value
+
+```YAML
+mariadb_extra_folders: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_extra_folders:
+  - /path/to/host/folder1
+  - /path/to/host/folder2
+  - /path/to/host/folder3
+```
+
+### mariadb_extra_labels
+
+List of extra labels to assign to docker
+
+#### Default value
+
+```YAML
+mariadb_extra_labels: []
+```
+
+### mariadb_extra_publish
+
+List of extra port publishing for docker
+
+#### Default value
+
+```YAML
+mariadb_extra_publish: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_extra_publish:
+  - 127.0.0.1:3306:3306
+```
+
 ### mariadb_extra_users
 
-List of additional users to create
+List of additional users to create for native installation
 
 #### Default value
 
@@ -280,6 +599,25 @@ mariadb_extra_users:
     state: present
   - name: foobar
     state: absent
+```
+
+### mariadb_extra_volumes
+
+List of extra volumes to mount for docker
+
+#### Default value
+
+```YAML
+mariadb_extra_volumes: []
+```
+
+#### Example usage
+
+```YAML
+mariadb_extra_volumes:
+  - /path/to/host/folder1:/path/within/container1
+  - /path/to/host/folder2:/path/within/container2
+  - /path/to/host/folder3:/path/within/container3
 ```
 
 ### mariadb_galera_address
@@ -342,7 +680,7 @@ mariadb_galera_primary:
 
 ### mariadb_global_databases
 
-List of databases to create
+List of databases to create for native installation
 
 #### Default value
 
@@ -364,7 +702,7 @@ mariadb_global_databases:
 
 ### mariadb_global_users
 
-List of users to create
+List of users to create for native installation
 
 #### Default value
 
@@ -393,6 +731,16 @@ List of ignored database directories
 
 ```YAML
 mariadb_ignore_db_dirs: []
+```
+
+### mariadb_image
+
+Docker image to use for deployment
+
+#### Default value
+
+```YAML
+mariadb_image: mariadb:{{ mariadb_upstream_version }}
 ```
 
 ### mariadb_innodb_buffer_pool_instances
@@ -455,6 +803,16 @@ InnoDB max dirty pages percentage
 mariadb_innodb_max_dirty_pages_pct: 90
 ```
 
+### mariadb_installation
+
+Select installation method, could be native or docker
+
+#### Default value
+
+```YAML
+mariadb_installation: native
+```
+
 ### mariadb_key_buffer_size
 
 Key buffer size
@@ -515,6 +873,80 @@ Max allowed connections
 mariadb_max_connections: 1000
 ```
 
+### mariadb_memory_limit
+
+Memory limit with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_memory_limit:
+```
+
+#### Example usage
+
+```YAML
+mariadb_memory_limit: 1024m
+```
+
+### mariadb_memory_soft_limit
+
+Soft memory limit with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_memory_soft_limit:
+```
+
+#### Example usage
+
+```YAML
+mariadb_memory_soft_limit: 512m
+```
+
+### mariadb_memory_swap
+
+Swap usage with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_memory_swap:
+```
+
+#### Example usage
+
+```YAML
+mariadb_memory_swap: 2048m
+```
+
+### mariadb_network
+
+Optional docker network to attach
+
+#### Default value
+
+```YAML
+mariadb_network:
+```
+
+### mariadb_number_of_cpus
+
+Number of CPUs with Docker deployment
+
+#### Default value
+
+```YAML
+mariadb_number_of_cpus:
+```
+
+#### Example usage
+
+```YAML
+mariadb_number_of_cpus: '1.0'
+```
+
 ### mariadb_oom_score_adjust
 
 Adjustment score for OOM killer
@@ -539,6 +971,26 @@ mariadb_packages:
   - mycli
   - python3-pymysql
   - rsync
+```
+
+### mariadb_password
+
+Password used within docker deployment
+
+#### Default value
+
+```YAML
+mariadb_password:
+```
+
+### mariadb_pull_image
+
+Pull image as part of the tasks
+
+#### Default value
+
+```YAML
+mariadb_pull_image: true
 ```
 
 ### mariadb_query_cache_size
@@ -671,7 +1123,17 @@ Upstream repo version
 #### Default value
 
 ```YAML
-mariadb_upstream_version: 10.6
+mariadb_upstream_version: 11.1
+```
+
+### mariadb_username
+
+Username used within docker deployment
+
+#### Default value
+
+```YAML
+mariadb_username:
 ```
 
 ## Discovered Tags
