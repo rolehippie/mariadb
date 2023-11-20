@@ -1,11 +1,53 @@
 [Unit]
 Description=Prometheus exporter for MariaDB
+
 After=network-online.target
+{% if mariadb_installation == 'docker' %}
+
+Wants=docker.service
+After=docker.service
+{% endif %}
 
 [Service]
 Restart=always
 EnvironmentFile=/etc/default/mariadb-exporter
+{% if mariadb_installation == 'docker' %}
+
+ExecStop=/bin/sh -c '/usr/bin/docker ps | /bin/grep %p 1> /dev/null && /usr/bin/docker stop %p || true'
+ExecStartPre=/bin/sh -c '/usr/bin/docker ps | /bin/grep %p 1> /dev/null && /usr/bin/docker kill %p || true'
+ExecStartPre=/bin/sh -c '/usr/bin/docker ps -a | /bin/grep %p 1> /dev/null && /usr/bin/docker rm %p || true'
+ExecStart=/usr/bin/docker run --rm \
+  --name %p \
+  --hostname %p \
+  --env-file /etc/default/mariadb-exporter \
+{% if mariadb_exporter_memory_limit | default(False) %}
+  --memory {{ mariadb_exporter_memory_limit }} \
+{% endif %}
+{% if mariadb_exporter_memory_swap | default(False) %}
+  --memory-swap {{ mariadb_exporter_memory_swap }} \
+{% endif %}
+{% if mariadb_exporter_memory_soft_limit | default(False) %}
+  --memory-reservation {{ mariadb_exporter_memory_soft_limit }} \
+{% endif %}
+{% if mariadb_exporter_cpu_shares | default(False) %}
+  --cpu-shares {{ mariadb_exporter_cpu_shares }} \
+{% endif %}
+{% if mariadb_exporter_number_of_cpus | default(False) %}
+  --cpus {{ mariadb_exporter_number_of_cpus }} \
+{% endif %}
+{% for item in mariadb_exporter_default_labels + mariadb_exporter_extra_labels %}
+  --label {{ item }} \
+{% endfor %}
+{% if mariadb_exporter_network | default(False) %}
+  --network {{ mariadb_exporter_network }} \
+{% endif %}
+{% for item in mariadb_exporter_default_publish + mariadb_exporter_extra_publish %}
+  --publish {{ item }} \
+{% endfor %}
+  {{ mariadb_exporter_image }} $ARGS
+{% else %}
 ExecStart=/usr/bin/mariadb-exporter $ARGS
+{% endif %}
 
 [Install]
 WantedBy=multi-user.target

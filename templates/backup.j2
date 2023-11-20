@@ -17,7 +17,7 @@ find ${PARENT_DIRECORY} \
     -ctime ${BACKUP_RETENTION} \
     -exec rm -rf {} \;
 
-DATABASES=$(mysql -e 'SHOW DATABASES;' | sed 1d | grep -v -E "{{ mariadb_backup_ignore }}")
+DATABASES=$({% if mariadb_installation == "native" %}mysql{% else %}docker exec mariadb mariadb -uroot -p{{ mariadb_root_password }}{% endif %} -e 'SHOW DATABASES;' | sed 1d | grep -v -E "{{ mariadb_backup_ignore }}")
 
 if [ "${DATABASES}" == "" ]; then
     echo "Found no databases..."
@@ -26,7 +26,7 @@ fi
 
 echo "Starting backup for mysql..."
 START=$(date +%s)
-mysqldump --max-allowed-packet={{ mariadb_max_allowed_packet }} --single-transaction --skip_add_locks --skip-lock-tables --databases --events mysql | gzip > "${BACKUP_DIRECTORY}/mysql.sql.gz"
+{% if mariadb_installation == "native" %}mysqldump{% else %}docker exec mariadb mariadb-dump -uroot -p{{ mariadb_root_password }}{% endif %} --max-allowed-packet={{ mariadb_max_allowed_packet }} --single-transaction --skip_add_locks --skip-lock-tables --databases --events mysql | gzip > "${BACKUP_DIRECTORY}/mysql.sql.gz"
 ENDS=$(date +%s)
 echo "Done within $((${ENDS}-${START}))s"
 
@@ -34,7 +34,7 @@ for DATABASE in ${DATABASES}
 do
     echo "Starting backup for ${DATABASE}..."
     START=$(date +%s)
-    mysqldump --max-allowed-packet={{ mariadb_max_allowed_packet }} --single-transaction --skip_add_locks --skip-lock-tables --databases ${DATABASE} | gzip > "${BACKUP_DIRECTORY}/${DATABASE}.sql.gz"
+    {% if mariadb_installation == "native" %}mysqldump{% else %}docker exec mariadb mariadb-dump -uroot -p{{ mariadb_root_password }}{% endif %} --max-allowed-packet={{ mariadb_max_allowed_packet }} --single-transaction --skip_add_locks --skip-lock-tables --databases ${DATABASE} | gzip > "${BACKUP_DIRECTORY}/${DATABASE}.sql.gz"
     ENDS=$(date +%s)
     echo "Done within $((${ENDS}-${START}))s"
 done

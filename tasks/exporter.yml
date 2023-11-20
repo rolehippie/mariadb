@@ -1,6 +1,8 @@
 # Standards: 1.2
 ---
 - name: Check existing install
+  when:
+    - mariadb_installation == 'native'
   register: mariadb_exporter_version_check
   failed_when: False
   changed_when: False
@@ -10,13 +12,17 @@
     - mariadb-exporter
 
 - name: Fact version change
+  when:
+    - mariadb_installation == 'native'
   set_fact:
     mariadb_exporter_version_changed: "{{ mariadb_exporter_version_check.rc != 0 or (mariadb_exporter_version_check.stdout_lines is defined and mariadb_exporter_version not in mariadb_exporter_version_check.stdout_lines[0]) | bool }}"
   tags:
     - mariadb-exporter
 
 - name: Download release tarball
-  when: mariadb_exporter_version_changed
+  when:
+    - mariadb_installation == 'native'
+    - mariadb_exporter_version_changed
   unarchive:
     src: "{{ mariadb_exporter_download }}"
     dest: /usr/local/src
@@ -27,7 +33,10 @@
     - mariadb-exporter
 
 - name: Copy exporter binary
-  when: mariadb_exporter_version_changed and not ansible_check_mode
+  when:
+    - mariadb_installation == 'native'
+    - mariadb_exporter_version_changed
+    - not ansible_check_mode
   notify:
     - Restart mariadb-exporter
   copy:
@@ -64,6 +73,25 @@
   tags:
     - mariadb-exporter
 
+- name: Pull docker image
+  when:
+    - mariadb_installation == 'docker'
+    - mariadb_exporter_pull_image
+  docker_image:
+    name: "{{ mariadb_exporter_image }}"
+    source: pull
+  tags:
+    - mariadb-exporter
+
+- name: Create docker network
+  when:
+    - mariadb_installation == 'docker'
+    - mariadb_exporter_network | default(False)
+  docker_network:
+    name: '{{ mariadb_exporter_network }}'
+  tags:
+    - mariadb-exporter
+
 - name: Start mariadb-exporter service
   ignore_errors: "{{ ansible_check_mode }}"
   systemd:
@@ -76,6 +104,8 @@
     - mariadb-exporter
 
 - name: Remove install directory
+  when:
+    - mariadb_installation == 'native'
   file:
     path: "/usr/local/src/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64"
     state: absent

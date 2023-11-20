@@ -1,0 +1,34 @@
+[Unit]
+Description=MariaDB
+
+Wants=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+RestartSec=10s
+EnvironmentFile=/etc/environment
+
+ExecStop=/bin/sh -c '/usr/bin/docker ps | /bin/grep %p 1> /dev/null && /usr/bin/docker stop %p || true'
+ExecStartPre=/bin/sh -c '/usr/bin/docker ps | /bin/grep %p 1> /dev/null && /usr/bin/docker kill %p || true'
+ExecStartPre=/bin/sh -c '/usr/bin/docker ps -a | /bin/grep %p 1> /dev/null && /usr/bin/docker rm %p || true'
+ExecStart=/usr/bin/docker run --rm \
+  --name %p \
+  --hostname %p \
+  --env-file /etc/default/mariadb \
+{% if mariadb_network | default(False) %}
+  --network {{ mariadb_network }} \
+{% endif %}
+{% for item in mariadb_default_labels + mariadb_extra_labels %}
+  --label {{ item }} \
+{% endfor %}
+{% for item in mariadb_default_volumes + mariadb_extra_volumes %}
+  --volume {{ item }} \
+{% endfor %}
+{% for item in mariadb_default_publish + mariadb_extra_publish %}
+  --publish {{ item }} \
+{% endfor %}
+  {{ mariadb_image }}
+
+[Install]
+WantedBy=multi-user.target

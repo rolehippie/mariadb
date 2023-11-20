@@ -1,16 +1,96 @@
 # Standards: 1.2
 ---
+# @var mariadb_installation:description: Select installation method, could be native or docker
+mariadb_installation: native
+
 # @var mariadb_upstream_repo:description: Install from upstream repository
 mariadb_upstream_repo: True
 
 # @var mariadb_upstream_version:description: Upstream repo version
-mariadb_upstream_version: 10.6
+mariadb_upstream_version: 11.1
 
 # @var mariadb_upstream_mirror:description: Upstream repo mirror URL
 mariadb_upstream_mirror: http://mirror.23m.com/mariadb/repo
 
 # @var mariadb_upstream_arch:description: Upstream repo architecture
 mariadb_upstream_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+
+# @var mariadb_image:description: Docker image to use for deployment
+mariadb_image: "mariadb:{{ mariadb_upstream_version }}"
+
+# @var mariadb_pull_image:description: Pull image as part of the tasks
+mariadb_pull_image: True
+
+# @var mariadb_network:description: Optional docker network to attach
+mariadb_network:
+
+# @var mariadb_default_publish:description: List of default port publishing for docker
+# @var mariadb_default_publish:example: >
+# mariadb_default_publish:
+#   - 127.0.0.1:3306:3306
+# @end
+mariadb_default_publish: []
+
+# @var mariadb_extra_publish:description: List of extra port publishing for docker
+# @var mariadb_extra_publish:example: >
+# mariadb_extra_publish:
+#   - 127.0.0.1:3306:3306
+# @end
+mariadb_extra_publish: []
+
+# @var mariadb_default_labels:description: List of default labels to assign to docker
+mariadb_default_labels: []
+
+# @var mariadb_extra_labels:description: List of extra labels to assign to docker
+mariadb_extra_labels: []
+
+# @var mariadb_default_folders:description: List of default folders to create
+mariadb_default_folders:
+  - /etc/systemd/system/mariadb.service.d
+  - /etc/mysql
+  - /etc/mysql/mariadb.conf.d
+
+# @var mariadb_extra_folders:description: List of extra folders to create
+# @var mariadb_extra_folders:example: >
+# mariadb_extra_folders:
+#   - /path/to/host/folder1
+#   - /path/to/host/folder2
+#   - /path/to/host/folder3
+# @end
+mariadb_extra_folders: []
+
+# @var mariadb_default_volumes:description: List of default volumes to mount for docker
+mariadb_default_volumes:
+  - /var/lib/mysql:/var/lib/mysql
+
+# @var mariadb_extra_volumes:description: List of extra volumes to mount for docker
+# @var mariadb_extra_volumes:example: >
+# mariadb_extra_volumes:
+#   - /path/to/host/folder1:/path/within/container1
+#   - /path/to/host/folder2:/path/within/container2
+#   - /path/to/host/folder3:/path/within/container3
+# @end
+mariadb_extra_volumes: []
+
+# @var mariadb_memory_limit:description: Memory limit with Docker deployment
+# @var mariadb_memory_limit:example: $ "1024m"
+mariadb_memory_limit:
+
+# @var mariadb_memory_swap:description: Swap usage with Docker deployment
+# @var mariadb_memory_swap:example: $ "2048m"
+mariadb_memory_swap:
+
+# @var mariadb_memory_soft_limit:description: Soft memory limit with Docker deployment
+# @var mariadb_memory_soft_limit:example: $ "512m"
+mariadb_memory_soft_limit:
+
+# @var mariadb_cpu_shares:description: CPU shares with Docker deployment
+# @var mariadb_cpu_shares:example: $ "512"
+mariadb_cpu_shares:
+
+# @var mariadb_number_of_cpus:description: Number of CPUs with Docker deployment
+# @var mariadb_number_of_cpus:example: $ "1.0"
+mariadb_number_of_cpus:
 
 # @var mariadb_keyring:description: Path for the repository keyring
 mariadb_keyring: /usr/share/keyrings/mariadb-archive-keyring.gpg
@@ -108,12 +188,21 @@ mariadb_root_username: root
 # @var mariadb_root_password:description: Password for the root user
 mariadb_root_password: root
 
+# @var mariadb_username:description: Username used within docker deployment
+mariadb_username:
+
+# @var mariadb_password:description: Password used within docker deployment
+mariadb_password:
+
+# @var mariadb_database:description: Database used within docker deployment
+mariadb_database:
+
 # @var mariadb_root_hosts:description: Allowed hosts for root user
 mariadb_root_hosts:
   - localhost
   - 127.0.0.1
 
-# @var mariadb_global_databases:description: List of databases to create
+# @var mariadb_global_databases:description: List of databases to create for native installation
 # @var mariadb_global_databases:example: >
 # mariadb_global_databases:
 #   - name: example
@@ -125,7 +214,7 @@ mariadb_root_hosts:
 # @end
 mariadb_global_databases: []
 
-# @var mariadb_extra_databases:description: List of additional databases to create
+# @var mariadb_extra_databases:description: List of additional databases to create for native installation
 # @var mariadb_extra_databases:example: >
 # mariadb_extra_databases:
 #   - name: example
@@ -137,7 +226,7 @@ mariadb_global_databases: []
 # @end
 mariadb_extra_databases: []
 
-# @var mariadb_global_users:description: List of users to create
+# @var mariadb_global_users:description: List of users to create for native installation
 # @var mariadb_global_users:example: >
 # mariadb_global_users:
 #   - name: example
@@ -150,7 +239,7 @@ mariadb_extra_databases: []
 # @end
 mariadb_global_users: []
 
-# @var mariadb_extra_users:description: List of additional users to create
+# @var mariadb_extra_users:description: List of additional users to create for native installation
 # @var mariadb_extra_users:example: >
 # mariadb_extra_users:
 #   - name: example
@@ -193,7 +282,7 @@ mariadb_backup_addition_script:
 mariadb_backup_cron: daily
 
 # @var mariadb_backup_ignore:description: Ignoring this filter via grep on database selection
-mariadb_backup_ignore: (_backup|mysql|information_schema|performance_schema)
+mariadb_backup_ignore: (_backup|mysql|sys|information_schema|performance_schema)
 
 # @var mariadb_backup_formatting:description: Date format for the backup folder name
 mariadb_backup_formatting: "%F"
@@ -207,6 +296,55 @@ mariadb_exporter_version: 0.15.0
 
 # @var mariadb_exporter_download:description: URL to the archive of the release to install
 mariadb_exporter_download: "https://github.com/prometheus/mysqld_exporter/releases/download/v{{ mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64.tar.gz"
+
+# @var mariadb_exporter_image:description: Docker image to use for deployment on OAuth2 Proxy
+mariadb_exporter_image: "prom/mysqld-exporter:v{{ mariadb_exporter_version }}"
+
+# @var mariadb_exporter_pull_image:description: Pull image as part of the tasks
+mariadb_exporter_pull_image: True
+
+# @var mariadb_exporter_network:description: Optional docker network to attach on OAuth2 Proxy
+mariadb_exporter_network: "{{ mariadb_network }}"
+
+# @var mariadb_exporter_default_publish:description: List of default port publishing for docker on OAuth2 Proxy
+# @var mariadb_exporter_default_publish:example: >
+# mariadb_exporter_default_publish:
+#   - 127.0.0.1:9104:9104
+# @end
+mariadb_exporter_default_publish: []
+
+# @var mariadb_exporter_extra_publish:description: List of extra port publishing for docker on OAuth2 Proxy
+# @var mariadb_exporter_extra_publish:example: >
+# mariadb_exporter_extra_publish:
+#   - 127.0.0.1:9104:9104
+# @end
+mariadb_exporter_extra_publish: []
+
+# @var mariadb_exporter_default_labels:description: List of default labels to assign to docker on OAuth2 Proxy
+mariadb_exporter_default_labels: []
+
+# @var mariadb_exporter_extra_labels:description: List of extra labels to assign to docker on OAuth2 Proxy
+mariadb_exporter_extra_labels: []
+
+# @var mariadb_exporter_memory_limit:description: Memory limit with Docker deployment
+# @var mariadb_exporter_memory_limit:example: $ "1024m"
+mariadb_exporter_memory_limit:
+
+# @var mariadb_exporter_memory_swap:description: Swap usage with Docker deployment
+# @var mariadb_exporter_memory_swap:example: $ "2048m"
+mariadb_exporter_memory_swap:
+
+# @var mariadb_exporter_memory_soft_limit:description: Soft memory limit with Docker deployment
+# @var mariadb_exporter_memory_soft_limit:example: $ "512m"
+mariadb_exporter_memory_soft_limit:
+
+# @var mariadb_exporter_cpu_shares:description: CPU shares with Docker deployment
+# @var mariadb_exporter_cpu_shares:example: $ "512"
+mariadb_exporter_cpu_shares:
+
+# @var mariadb_exporter_number_of_cpus:description: Number of CPUs with Docker deployment
+# @var mariadb_exporter_number_of_cpus:example: $ "1.5"
+mariadb_exporter_number_of_cpus:
 
 # @var mariadb_exporter_collect_info_schema_tables:description: Enable info schema tables collector
 mariadb_exporter_collect_info_schema_tables: True
