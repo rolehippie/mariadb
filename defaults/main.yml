@@ -1,4 +1,3 @@
-# Standards: 1.2
 ---
 # @var mariadb_installation:description: Select installation method, could be native or docker
 mariadb_installation: native
