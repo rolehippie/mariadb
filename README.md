@@ -1145,7 +1145,7 @@ mariadb_username:
 
 ## Dependencies
 
-- None
+- [rolehippie.docker](https://github.com/rolehippie/docker)
 
 ## License
 

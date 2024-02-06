@@ -3,7 +3,7 @@
   register: mariadb_galera_status
   delegate_to: "{{ mariadb_galera_primary | default('dummy') }}"
   run_once: True
-  mysql_info:
+  community.mysql.mysql_info:
     filter: settings
     login_unix_socket: /var/run/mysqld/mysqld.sock
     login_user: "{{ mariadb_root_username }}"
@@ -14,7 +14,7 @@
 - name: Stop mariadb services
   when:
     - mariadb_galera_status.settings.wsrep_on == 'OFF'
-  systemd:
+  ansible.builtin.systemd:
     name: mariadb
     state: stopped
     daemon_reload: True
@@ -29,7 +29,7 @@
     - inventory_hostname == mariadb_galera_primary
   vars:
     mariadb_galera_nodes: []
-  template:
+  ansible.builtin.template:
     src: galera.j2
     dest: /etc/mysql/mariadb.conf.d/60-galera.cnf
     owner: root
@@ -42,7 +42,7 @@
   when:
     - mariadb_galera_status.settings.wsrep_on == 'OFF'
     - inventory_hostname == mariadb_galera_primary
-  command: galera_new_cluster
+  ansible.builtin.command: galera_new_cluster
   tags:
     - mariadb
 
@@ -50,7 +50,7 @@
   when:
     - mariadb_galera_status.settings.wsrep_on == 'OFF'
     - inventory_hostname == mariadb_galera_primary
-  template:
+  ansible.builtin.template:
     src: galera.j2
     dest: /etc/mysql/mariadb.conf.d/60-galera.cnf
     owner: root
@@ -62,7 +62,7 @@
 - name: Start galera cluster
   when:
     - mariadb_galera_status.settings.wsrep_on == 'OFF'
-  systemd:
+  ansible.builtin.systemd:
     name: mariadb
     state: started
     daemon_reload: True

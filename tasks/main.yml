@@ -2,7 +2,7 @@
 - name: Remove legacy key
   when:
     - mariadb_installation == 'native'
-  apt_key:
+  ansible.builtin.apt_key:
     id: 177F4010FE56CA3336300305F1656F24C74CD1D8
     state: absent
   tags:
@@ -11,7 +11,7 @@
 - name: Remove legacy repo
   when:
     - mariadb_installation == 'native'
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb [arch={{ mariadb_upstream_arch }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
     filename: mariadb
     update_cache: False
@@ -22,7 +22,7 @@
 - name: Download repo key
   when:
     - mariadb_installation == 'native'
-  shell:
+  ansible.builtin.shell:
     cmd: "curl -sSL 'https://mariadb.org/mariadb_release_signing_key.asc' | gpg --dearmor --output {{ mariadb_keyring }}"
     creates: "{{ mariadb_keyring }}"
   tags:
@@ -31,7 +31,7 @@
 - name: Add apt repository
   when:
     - mariadb_installation == 'native'
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb [arch={{ mariadb_upstream_arch }} signed-by={{ mariadb_keyring }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
     filename: mariadb
     update_cache: True
@@ -41,7 +41,7 @@
 
 - name: Create required dirs
   loop: "{{ mariadb_default_folders + mariadb_extra_folders }}"
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     owner: root
     group: root
@@ -54,7 +54,7 @@
   when:
     - mariadb_installation == 'native'
   loop: "{{ mariadb_packages }}"
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   tags:
@@ -64,7 +64,7 @@
   when:
     - mariadb_installation == 'native'
     - mariadb_temp_directory | default(False)
-  file:
+  ansible.builtin.file:
     path: "{{ mariadb_temp_directory }}"
     owner: root
     group: root
@@ -76,7 +76,7 @@
 - name: Fix data permissions
   when:
     - not ansible_check_mode
-  file:
+  ansible.builtin.file:
     path: /var/lib/mysql
     owner: "{{ 'mysql' if mariadb_installation == 'native' else '999' }}"
     group: "{{ 'mysql' if mariadb_installation == 'native' else '999' }}"
@@ -93,7 +93,7 @@
     - item.state | default("present") == "present"
   notify:
     - Restart mariadb
-  copy:
+  ansible.builtin.copy:
     content: "{{ item.content }}"
     dest: "/etc/mysql/mariadb.conf.d/{{ item.priority | default('99') }}-{{ item.name }}.cnf"
     owner: root
@@ -110,7 +110,7 @@
     - item.state | default("present") == "absent"
   notify:
     - Restart mariadb
-  file:
+  ansible.builtin.file:
     path: "/etc/mysql/mariadb.conf.d/{{ item.priority | default('99') }}-{{ item.name }}.cnf"
     state: absent
   tags:
@@ -122,7 +122,7 @@
     - mariadb_galera_enabled
   notify:
     - Restart mariadb
-  template:
+  ansible.builtin.template:
     src: galera.j2
     dest: /etc/mysql/mariadb.conf.d/60-galera.cnf
     owner: root
@@ -136,7 +136,7 @@
     - mariadb_installation == 'native'
   notify:
     - Restart mariadb
-  template:
+  ansible.builtin.template:
     src: config.j2
     dest: /etc/mysql/mariadb.conf.d/99-override.cnf
     owner: root
@@ -150,7 +150,7 @@
     - mariadb_installation == 'native'
   notify:
     - Restart mariadb
-  template:
+  ansible.builtin.template:
     src: override.j2
     dest: /etc/systemd/system/mariadb.service.d/override.conf
     owner: root
@@ -164,7 +164,7 @@
     - mariadb_installation == 'docker'
   notify:
     - Restart mariadb
-  template:
+  ansible.builtin.template:
     src: default.j2
     dest: /etc/default/mariadb
     owner: root
@@ -178,7 +178,7 @@
     - mariadb_installation == 'docker'
   notify:
     - Restart mariadb
-  template:
+  ansible.builtin.template:
     src: service.j2
     dest: /etc/systemd/system/mariadb.service
     owner: root
@@ -191,7 +191,7 @@
   when:
     - mariadb_installation == 'docker'
     - mariadb_pull_image
-  docker_image:
+  community.docker.docker_image:
     name: "{{ mariadb_image }}"
     source: pull
   tags:
@@ -201,14 +201,14 @@
   when:
     - mariadb_installation == 'docker'
     - mariadb_network | default(False)
-  docker_network:
+  community.docker.docker_network:
     name: '{{ mariadb_network }}'
   tags:
     - mariadb
 
 - name: Start mariadb service
   ignore_errors: "{{ ansible_check_mode }}"
-  systemd:
+  ansible.builtin.systemd:
     name: mariadb
     state: started
     daemon_reload: True
@@ -223,7 +223,7 @@
     - not ansible_check_mode
   diff: False
   loop: "{{ mariadb_root_hosts }}"
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ mariadb_root_username }}"
     password: "{{ mariadb_root_password }}"
     host: "{{ item }}"
@@ -239,7 +239,7 @@
 - name: Write debian config
   when:
     - mariadb_installation == 'native'
-  template:
+  ansible.builtin.template:
     src: debian.j2
     dest: /etc/mysql/debian.cnf
     owner: root
@@ -251,7 +251,7 @@
 - name: Write auth config
   when:
     - mariadb_installation == 'native'
-  template:
+  ansible.builtin.template:
     src: auth.j2
     dest: /root/.my.cnf
     owner: root
@@ -265,7 +265,7 @@
     - mariadb_installation == 'native'
     - not ansible_check_mode
   diff: False
-  mysql_user:
+  community.mysql.mysql_user:
     name: ""
     host_all: True
     state: absent
@@ -277,7 +277,7 @@
   when:
     - mariadb_installation == 'native'
     - not ansible_check_mode
-  mysql_db:
+  community.mysql.mysql_db:
     name: test
     state: absent
     login_unix_socket: /var/run/mysqld/mysqld.sock
@@ -288,7 +288,7 @@
   when:
     - mariadb_installation == 'native'
     - mariadb_galera_enabled | default(False)
-  include_tasks: galera.yml
+  ansible.builtin.include_tasks: galera.yml
   tags:
     - mariadb
 
@@ -300,7 +300,7 @@
   loop: "{{ mariadb_global_databases + mariadb_extra_databases }}"
   loop_control:
     label: "{{ item.name }}"
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ item.name }}"
     collation: "{{ item.collation | default(omit) }}"
     encoding: "{{ item.encoding | default(omit) }}"
@@ -318,7 +318,7 @@
   loop: "{{ mariadb_global_users + mariadb_extra_users }}"
   loop_control:
     label: "{{ item.name }}"
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ item.name }}"
     password: "{{ item.password | default(omit) }}"
     host: "{{ item.host | default('%') }}"
@@ -332,7 +332,7 @@
 
 - name: Write backup script
   when: mariadb_backup_enabled
-  template:
+  ansible.builtin.template:
     src: backup.j2
     dest: /usr/local/bin/mariadb-backup
     owner: root
@@ -343,14 +343,14 @@
 
 - name: Remove backup script
   when: not mariadb_backup_enabled
-  file:
+  ansible.builtin.file:
     path: /usr/local/bin/mariadb-backup
     state: absent
   tags:
     - mariadb
 
 - name: Create backup cronjobs
-  cron:
+  ansible.builtin.cron:
     name: mariadb backup
     special_time: "{{ mariadb_backup_cron }}"
     job: /usr/bin/cronic /usr/local/bin/mariadb-backup
@@ -360,7 +360,7 @@
 
 - name: Include exporter tasks
   when: mariadb_exporter_enabled | default(False)
-  include_tasks: exporter.yml
+  ansible.builtin.include_tasks: exporter.yml
   tags:
     - mariadb
     - mariadb-exporter

@@ -1,12 +1,12 @@
 ---
 - name: Restart mariadb
-  systemd:
+  ansible.builtin.systemd:
     name: mariadb
     state: restarted
     daemon_reload: True
 
 - name: Restart mariadb-exporter
-  systemd:
+  ansible.builtin.systemd:
     name: mariadb-exporter
     state: restarted
     daemon_reload: True
