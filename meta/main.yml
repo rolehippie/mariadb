@@ -1,4 +1,3 @@
-# Standards: 1.2
 ---
 # @meta author:value: [Thomas Boerger](https://github.com/tboerger)
 # @meta description: >
@@ -16,7 +15,7 @@
 # Building and improving this Ansible role have been sponsored by my current and previous employers like **[Cloudpunks GmbH](https://cloudpunks.de)** and **[Proact Deutschland GmbH](https://www.proact.eu)**.
 # @end
 # @meta dependencies:value: >
-# None
+# [rolehippie.docker](https://github.com/rolehippie/docker)
 # @end
 galaxy_info:
   role_name: mariadb
@@ -28,7 +27,6 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - bionic
         - focal
         - jammy
   galaxy_tags:
