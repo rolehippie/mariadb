@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.0](https://github.com/rolehippie/mariadb/compare/v1.3.1...v2.0.0) (2024-02-12)
+
+
+### Features
+
+* drop support for ubuntu 18.04 ([691a8aa](https://github.com/rolehippie/mariadb/commit/691a8aa918b75f92f87fa24a18d9ded73a4eeb3a))
+* used full qualified collection names ([a67a856](https://github.com/rolehippie/mariadb/commit/a67a856085bc7f5e431f0c5f2256c3d4a43492ff))
+
+
+### Bugfixes
+
+* remove meta requirements and document used collections ([fbb78b4](https://github.com/rolehippie/mariadb/commit/fbb78b4ad6a65bfe3160266b1440abd60a690052))
+
 ## [1.3.1](https://github.com/rolehippie/mariadb/compare/v1.3.0...v1.3.1) (2023-12-18)
 
 
