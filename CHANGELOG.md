@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/rolehippie/mariadb/compare/v2.0.0...v2.1.0) (2024-11-11)
+
+
+### Features
+
+* **deps:** update dependency prometheus/mysqld_exporter to v0.16.0 ([#30](https://github.com/rolehippie/mariadb/issues/30)) ([5ed31b3](https://github.com/rolehippie/mariadb/commit/5ed31b34562591adbac0aad2157aebe0097dbe98))
+
 ## [2.0.0](https://github.com/rolehippie/mariadb/compare/v1.3.1...v2.0.0) (2024-02-12)
 
 
