@@ -1123,7 +1123,7 @@ Upstream repo version
 #### Default value
 
 ```YAML
-mariadb_upstream_version: 11.1
+mariadb_upstream_version: 11.8
 ```
 
 ### mariadb_username
