@@ -483,7 +483,7 @@ Version of the release to install
 #### Default value
 
 ```YAML
-mariadb_exporter_version: 0.16.0
+mariadb_exporter_version: 0.17.1
 ```
 
 ### mariadb_extra_configs
