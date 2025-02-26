@@ -291,7 +291,7 @@ mariadb_exporter_enabled: True
 
 # @var mariadb_exporter_version:description: Version of the release to install
 # renovate: datasource=github-releases depName=prometheus/mysqld_exporter
-mariadb_exporter_version: 0.17.1
+mariadb_exporter_version: 0.17.2
 
 # @var mariadb_exporter_download:description: URL to the archive of the release to install
 mariadb_exporter_download: "https://github.com/prometheus/mysqld_exporter/releases/download/v{{ mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64.tar.gz"
