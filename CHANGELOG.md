@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.0](https://github.com/rolehippie/mariadb/compare/v2.1.0...v2.2.0) (2025-03-03)
+
+
+### Features
+
+* **deps:** update dependency prometheus/mysqld_exporter to v0.17.1 ([#33](https://github.com/rolehippie/mariadb/issues/33)) ([dab64ca](https://github.com/rolehippie/mariadb/commit/dab64ca9ecc675943079bcfa52551bda0ee59f95))
+* upgrade upstream repo to 11.8 ([8db20eb](https://github.com/rolehippie/mariadb/commit/8db20eb99f49453211d3147b153bc970f9b22202))
+
+
+### Bugfixes
+
+* **deps:** update dependency prometheus/mysqld_exporter to v0.17.2 ([#34](https://github.com/rolehippie/mariadb/issues/34)) ([ecd0957](https://github.com/rolehippie/mariadb/commit/ecd0957b478f66e69fa93fd8013d84d2b3408109))
+
 ## [2.1.0](https://github.com/rolehippie/mariadb/compare/v2.0.0...v2.1.0) (2024-11-11)
 
 
