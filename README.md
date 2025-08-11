@@ -1,4 +1,4 @@
-# mariadb
+# workspace
 
 [![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/rolehippie/mariadb)
 [![General Workflow](https://github.com/rolehippie/mariadb/actions/workflows/general.yml/badge.svg)](https://github.com/rolehippie/mariadb/actions/workflows/general.yml)
@@ -341,8 +341,10 @@ URL to the archive of the release to install
 #### Default value
 
 ```YAML
-mariadb_exporter_download: https://github.com/prometheus/mysqld_exporter/releases/download/v{{
-  mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64.tar.gz
+mariadb_exporter_download: 
+  https://github.com/prometheus/mysqld_exporter/releases/download/v{{ 
+  mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version 
+  }}.linux-amd64.tar.gz
 ```
 
 ### mariadb_exporter_enabled
@@ -1141,7 +1143,6 @@ mariadb_username:
 **_mariadb_**
 
 **_mariadb-exporter_**
-
 
 ## Dependencies
 
