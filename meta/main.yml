@@ -31,11 +31,16 @@ galaxy_info:
       versions:
         - focal
         - jammy
+        - noble
   galaxy_tags:
     - mariadb
     - database
     - mysql
 
 dependencies: []
+
+collections:
+  - community.docker
+  - community.mysql
 
 ...

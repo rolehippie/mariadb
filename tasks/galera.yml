@@ -2,7 +2,7 @@
 - name: Check galera status
   register: mariadb_galera_status
   delegate_to: "{{ mariadb_galera_primary | default('dummy') }}"
-  run_once: True
+  run_once: true
   community.mysql.mysql_info:
     filter: settings
     login_unix_socket: /var/run/mysqld/mysqld.sock
@@ -17,9 +17,9 @@
   ansible.builtin.systemd:
     name: mariadb
     state: stopped
-    daemon_reload: True
-    masked: False
-    enabled: True
+    daemon_reload: true
+    masked: false
+    enabled: true
   tags:
     - mariadb
 
@@ -65,9 +65,9 @@
   ansible.builtin.systemd:
     name: mariadb
     state: started
-    daemon_reload: True
-    masked: False
-    enabled: True
+    daemon_reload: true
+    masked: false
+    enabled: true
   tags:
     - mariadb
 

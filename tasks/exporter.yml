@@ -3,9 +3,9 @@
   when:
     - mariadb_installation == 'native'
   register: mariadb_exporter_version_check
-  failed_when: False
-  changed_when: False
-  check_mode: False
+  failed_when: false
+  changed_when: false
+  check_mode: false
   ansible.builtin.shell: /usr/bin/mariadb-exporter --version 2>&1
   tags:
     - mariadb-exporter
@@ -25,7 +25,7 @@
   ansible.builtin.unarchive:
     src: "{{ mariadb_exporter_download }}"
     dest: /usr/local/src
-    remote_src: True
+    remote_src: true
     owner: root
     group: root
   tags:
@@ -41,7 +41,7 @@
   ansible.builtin.copy:
     src: "/usr/local/src/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64/mysqld_exporter"
     dest: /usr/bin/mariadb-exporter
-    remote_src: True
+    remote_src: true
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx
@@ -85,7 +85,7 @@
 - name: Create docker network
   when:
     - mariadb_installation == 'docker'
-    - mariadb_exporter_network | default(False)
+    - false if mariadb_exporter_network is none else (mariadb_exporter_network | length > 0)| default(false)
   community.docker.docker_network:
     name: '{{ mariadb_exporter_network }}'
   tags:
@@ -96,9 +96,9 @@
   ansible.builtin.systemd:
     name: mariadb-exporter
     state: started
-    daemon_reload: True
-    masked: False
-    enabled: True
+    daemon_reload: true
+    masked: false
+    enabled: true
   tags:
     - mariadb-exporter
 

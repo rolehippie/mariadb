@@ -14,7 +14,7 @@
   ansible.builtin.apt_repository:
     repo: "deb [arch={{ mariadb_upstream_arch }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
     filename: mariadb
-    update_cache: False
+    update_cache: false
     state: absent
   tags:
     - mariadb
@@ -34,7 +34,7 @@
   ansible.builtin.apt_repository:
     repo: "deb [arch={{ mariadb_upstream_arch }} signed-by={{ mariadb_keyring }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
     filename: mariadb
-    update_cache: True
+    update_cache: true
     state: present
   tags:
     - mariadb
@@ -63,7 +63,7 @@
 - name: Create temp directory
   when:
     - mariadb_installation == 'native'
-    - mariadb_temp_directory | default(False)
+    - mariadb_temp_directory | default(false)
   ansible.builtin.file:
     path: "{{ mariadb_temp_directory }}"
     owner: root
@@ -200,7 +200,7 @@
 - name: Create docker network
   when:
     - mariadb_installation == 'docker'
-    - mariadb_network | default(False)
+    - false if mariadb_network is none else (mariadb_network | length > 0)| default(false)
   community.docker.docker_network:
     name: '{{ mariadb_network }}'
   tags:
@@ -211,9 +211,9 @@
   ansible.builtin.systemd:
     name: mariadb
     state: started
-    daemon_reload: True
-    masked: False
-    enabled: True
+    daemon_reload: true
+    masked: false
+    enabled: true
   tags:
     - mariadb
 
@@ -221,13 +221,13 @@
   when:
     - mariadb_installation == 'native'
     - not ansible_check_mode
-  diff: False
+  diff: false
   loop: "{{ mariadb_root_hosts }}"
   community.mysql.mysql_user:
     name: "{{ mariadb_root_username }}"
     password: "{{ mariadb_root_password }}"
     host: "{{ item }}"
-    check_implicit_admin: True
+    check_implicit_admin: true
     login_unix_socket: /var/run/mysqld/mysqld.sock
     login_user: "{{ mariadb_root_username }}"
     login_password: "{{ mariadb_root_password }}"
@@ -264,10 +264,10 @@
   when:
     - mariadb_installation == 'native'
     - not ansible_check_mode
-  diff: False
+  diff: false
   community.mysql.mysql_user:
     name: ""
-    host_all: True
+    host_all: true
     state: absent
     login_unix_socket: /var/run/mysqld/mysqld.sock
   tags:
@@ -287,7 +287,7 @@
 - name: Include galera tasks
   when:
     - mariadb_installation == 'native'
-    - mariadb_galera_enabled | default(False)
+    - mariadb_galera_enabled | default(false)
   ansible.builtin.include_tasks: galera.yml
   tags:
     - mariadb
@@ -314,7 +314,7 @@
   when:
     - mariadb_installation == 'native'
     - not ansible_check_mode
-  diff: False
+  diff: false
   loop: "{{ mariadb_global_users + mariadb_extra_users }}"
   loop_control:
     label: "{{ item.name }}"
@@ -324,7 +324,7 @@
     host: "{{ item.host | default('%') }}"
     priv: "{{ item.priv | default(omit) }}"
     update_password: "{{ item.update_password | default('always') }}"
-    encrypted: "{{ item.encrypted | default(False) }}"
+    encrypted: "{{ item.encrypted | default(false) }}"
     state: "{{ item.state | default('present') }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
   tags:
@@ -359,7 +359,7 @@
     - mariadb
 
 - name: Include exporter tasks
-  when: mariadb_exporter_enabled | default(False)
+  when: mariadb_exporter_enabled | default(false)
   ansible.builtin.include_tasks: exporter.yml
   tags:
     - mariadb

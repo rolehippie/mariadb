@@ -16,7 +16,7 @@ ExecStart=/usr/bin/docker run --rm \
   --name %p \
   --hostname %p \
   --env-file /etc/default/mariadb \
-{% if mariadb_network | default(False) %}
+{% if mariadb_network | default(false) %}
   --network {{ mariadb_network }} \
 {% endif %}
 {% for item in mariadb_default_labels + mariadb_extra_labels %}

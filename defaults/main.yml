@@ -3,7 +3,7 @@
 mariadb_installation: native
 
 # @var mariadb_upstream_repo:description: Install from upstream repository
-mariadb_upstream_repo: True
+mariadb_upstream_repo: true
 
 # @var mariadb_upstream_version:description: Upstream repo version
 mariadb_upstream_version: 11.8
@@ -18,7 +18,7 @@ mariadb_upstream_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'am
 mariadb_image: "mariadb:{{ mariadb_upstream_version }}"
 
 # @var mariadb_pull_image:description: Pull image as part of the tasks
-mariadb_pull_image: True
+mariadb_pull_image: true
 
 # @var mariadb_network:description: Optional docker network to attach
 mariadb_network:
@@ -113,7 +113,7 @@ mariadb_ignore_db_dirs: []
 mariadb_temp_directory:
 
 # @var mariadb_skip_name_resolve:description: Skip name resolving
-mariadb_skip_name_resolve: True
+mariadb_skip_name_resolve: true
 
 # @var mariadb_innodb_buffer_pool_size:description: InnoDB buffer pool size
 mariadb_innodb_buffer_pool_size: 256M
@@ -164,7 +164,7 @@ mariadb_oom_score_adjust: -999
 mariadb_timeout_start_sec: 120
 
 # @var mariadb_galera_enabled:description: Enable galera clustering
-mariadb_galera_enabled: False
+mariadb_galera_enabled: false
 
 # @var mariadb_galera_primary:description: Inventory of primary galera node
 mariadb_galera_primary:
@@ -266,7 +266,7 @@ mariadb_extra_users: []
 mariadb_extra_configs: []
 
 # @var mariadb_backup_enabled:description: Enable or disable the backup script
-mariadb_backup_enabled: False
+mariadb_backup_enabled: false
 
 # @var mariadb_backup_path:description: Path to store the backups
 mariadb_backup_path: /var/lib/mysql/_backup
@@ -287,7 +287,7 @@ mariadb_backup_ignore: (_backup|mysql|sys|information_schema|performance_schema)
 mariadb_backup_formatting: "%F"
 
 # @var mariadb_exporter_enabled:description: Enable the mariadb exporter
-mariadb_exporter_enabled: True
+mariadb_exporter_enabled: true
 
 # @var mariadb_exporter_version:description: Version of the release to install
 # renovate: datasource=github-releases depName=prometheus/mysqld_exporter
@@ -300,7 +300,7 @@ mariadb_exporter_download: "https://github.com/prometheus/mysqld_exporter/releas
 mariadb_exporter_image: "prom/mysqld-exporter:v{{ mariadb_exporter_version }}"
 
 # @var mariadb_exporter_pull_image:description: Pull image as part of the tasks
-mariadb_exporter_pull_image: True
+mariadb_exporter_pull_image: true
 
 # @var mariadb_exporter_network:description: Optional docker network to attach on OAuth2 Proxy
 mariadb_exporter_network: "{{ mariadb_network }}"
@@ -346,7 +346,7 @@ mariadb_exporter_cpu_shares:
 mariadb_exporter_number_of_cpus:
 
 # @var mariadb_exporter_collect_info_schema_tables:description: Enable info schema tables collector
-mariadb_exporter_collect_info_schema_tables: True
+mariadb_exporter_collect_info_schema_tables: true
 
 # @var mariadb_exporter_args:description: List of arguments joined for the executable
 mariadb_exporter_args: []

@@ -3,13 +3,13 @@ bind-address = {{ mariadb_bind_address }}
 
 max_allowed_packet = {{ mariadb_max_allowed_packet }}
 max_connections = {{ mariadb_max_connections }}
-{% if mariadb_ignore_db_dirs | default(False) %}
+{% if mariadb_ignore_db_dirs | default(false) %}
 
 {% for item in mariadb_ignore_db_dirs %}
 ignore_db_dirs = {{ item }}
 {% endfor %}
 {% endif %}
-{% if mariadb_temp_directory | default(False) %}
+{% if mariadb_temp_directory | default(false) %}
 
 tmpdir = {{ mariadb_temp_directory }}
 {% endif %}
