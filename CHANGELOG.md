@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.0](https://github.com/rolehippie/mariadb/compare/v2.3.0...v2.4.0) (2025-11-17)
+
+
+### Features
+
+* apply new repo structure and update linting ([8e4fa54](https://github.com/rolehippie/mariadb/commit/8e4fa542f8c3245156f7743a56e51b8a1ecbbf01))
+
 ## [2.3.0](https://github.com/rolehippie/mariadb/compare/v2.2.0...v2.3.0) (2025-10-06)
 
 
