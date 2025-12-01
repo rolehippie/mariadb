@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.0](https://github.com/rolehippie/mariadb/compare/v2.4.0...v3.0.0) (2025-12-01)
+
+
+### Features
+
+* **major:** update dependency community.docker to v5 ([ecc2a8f](https://github.com/rolehippie/mariadb/commit/ecc2a8f1a7caa471be0a35e47e6a05fdf6410413))
+
 ## [2.4.0](https://github.com/rolehippie/mariadb/compare/v2.3.0...v2.4.0) (2025-11-17)
 
 
