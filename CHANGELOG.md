@@ -1,5 +1,32 @@
 # Changelog
 
+## [3.1.0](https://github.com/rolehippie/mariadb/compare/v3.0.0...v3.1.0) (2026-03-30)
+
+### Dependencies
+
+* **minor:** update dependency community.docker to >=5.1.0,<5.2.0 ([d0d5164](https://github.com/rolehippie/mariadb/commit/d0d5164d3201ccfa4cdaf031637a118199727284))
+* **minor:** update dependency prometheus/mysqld_exporter to v0.19.0 ([8f59b75](https://github.com/rolehippie/mariadb/commit/8f59b75e8f07851d287fa2e1661f2c5f9c68026d))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([24c037e](https://github.com/rolehippie/mariadb/commit/24c037e164a44c26a18580ec8d9dda10bf6f233b))
+* **flake:** updated lockfile [skip ci] ([e890076](https://github.com/rolehippie/mariadb/commit/e8900768dad5b1f15946cb7cdeb2476812f5514f))
+* **flake:** updated lockfile [skip ci] ([ec0187a](https://github.com/rolehippie/mariadb/commit/ec0187a1779ff2370b7f27243c41586e4d3580ac))
+* **flake:** updated lockfile [skip ci] ([48a601c](https://github.com/rolehippie/mariadb/commit/48a601c88b30b8f5c8bd9e7d306c031a2570ac12))
+* **flake:** updated lockfile [skip ci] ([6d01d34](https://github.com/rolehippie/mariadb/commit/6d01d341075ff0cc62fd487b0f575ba85986a955))
+* **flake:** updated lockfile [skip ci] ([91bb297](https://github.com/rolehippie/mariadb/commit/91bb29701c56a096d7b391608f28401fadbd1ba8))
+* **flake:** updated lockfile [skip ci] ([e49fd7a](https://github.com/rolehippie/mariadb/commit/e49fd7a507734d31d25676aba54f5349090891d5))
+* **flake:** updated lockfile [skip ci] ([f3f842b](https://github.com/rolehippie/mariadb/commit/f3f842bc238d91acfe5ba98e00b035df0b31ffbf))
+* **flake:** updated lockfile [skip ci] ([f35e7f7](https://github.com/rolehippie/mariadb/commit/f35e7f7ccb37f9a83d1173c211cad89debc3b7d5))
+* **flake:** updated lockfile [skip ci] ([ce54965](https://github.com/rolehippie/mariadb/commit/ce549656f301ce57bdd87328341ce6b33822feea))
+* **flake:** updated lockfile [skip ci] ([f87b739](https://github.com/rolehippie/mariadb/commit/f87b73950dcbc1fd8c36b44f9a8165ed80c38038))
+* **flake:** updated lockfile [skip ci] ([e2b7b43](https://github.com/rolehippie/mariadb/commit/e2b7b43a2402e09fcae083287f09eae3a2a190ab))
+* **flake:** updated lockfile [skip ci] ([6e62680](https://github.com/rolehippie/mariadb/commit/6e6268091803bed2d48f2a909c432654c845c421))
+* **flake:** updated lockfile [skip ci] ([5ae7c5b](https://github.com/rolehippie/mariadb/commit/5ae7c5bf2145e168754feca7dfd0c3cf1a394f34))
+* **flake:** updated lockfile [skip ci] ([7edede3](https://github.com/rolehippie/mariadb/commit/7edede331a4be69b57524bfe7a3b45aa8029407c))
+* **flake:** updated lockfile [skip ci] ([96c615d](https://github.com/rolehippie/mariadb/commit/96c615dc878d9c73ecb817c2d5be16489d9852c1))
+* **flake:** updated lockfile [skip ci] ([8e2a2e3](https://github.com/rolehippie/mariadb/commit/8e2a2e3f5dfb1f79bd1c36c6507349317278a9b5))
+
 ## [3.0.0](https://github.com/rolehippie/mariadb/compare/v2.4.0...v3.0.0) (2025-12-01)
 
 
