@@ -341,10 +341,7 @@ URL to the archive of the release to install
 #### Default value
 
 ```YAML
-mariadb_exporter_download: 
-  https://github.com/prometheus/mysqld_exporter/releases/download/v{{ 
-  mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version 
-  }}.linux-amd64.tar.gz
+mariadb_exporter_download: https://github.com/prometheus/mysqld_exporter/releases/download/v{{ mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64.tar.gz
 ```
 
 ### mariadb_exporter_enabled
@@ -449,7 +446,7 @@ Optional docker network to attach on OAuth2 Proxy
 #### Default value
 
 ```YAML
-mariadb_exporter_network: '{{ mariadb_network }}'
+mariadb_exporter_network:
 ```
 
 ### mariadb_exporter_number_of_cpus
@@ -1094,8 +1091,7 @@ Upstream repo architecture
 #### Default value
 
 ```YAML
-mariadb_upstream_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64'
-  }}"
+mariadb_upstream_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
 ```
 
 ### mariadb_upstream_mirror
