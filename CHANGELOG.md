@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.2.0](https://github.com/rolehippie/mariadb/compare/v3.1.0...v3.2.0) (2026-04-20)
+
+### Dependencies
+
+* **minor:** update dependency community.docker to >=5.2.0,<5.3.0 ([5cf9eb4](https://github.com/rolehippie/mariadb/commit/5cf9eb41cb31014160dd21f2143777756fba2e61))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([fb2cac6](https://github.com/rolehippie/mariadb/commit/fb2cac6cf48935bf3fc915b1e8c7071346370551))
+* **flake:** updated lockfile [skip ci] ([cab885f](https://github.com/rolehippie/mariadb/commit/cab885fee927d209b2140c371bef641e52fcb513))
+* **flake:** updated lockfile [skip ci] ([44e15e9](https://github.com/rolehippie/mariadb/commit/44e15e91c7d555070cf6cb59ba5cf58432821458))
+
 ## [3.1.0](https://github.com/rolehippie/mariadb/compare/v3.0.0...v3.1.0) (2026-03-30)
 
 ### Dependencies
