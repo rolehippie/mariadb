@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.0.0](https://github.com/rolehippie/mariadb/compare/v3.2.0...v4.0.0) (2026-05-11)
+
+### Dependencies
+
+* **major:** update dependency community.mysql to v5 ([fde5faa](https://github.com/rolehippie/mariadb/commit/fde5faa41e4f9d24bbb06afd1854127b50a87f65))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([0755720](https://github.com/rolehippie/mariadb/commit/07557208f8311a2985b941a12cd3c73c971b5fcd))
+* **flake:** updated lockfile [skip ci] ([282effa](https://github.com/rolehippie/mariadb/commit/282effa7a68deccf5ac9c5501ba3431aa3ba23ab))
+* **flake:** updated lockfile [skip ci] ([14607bc](https://github.com/rolehippie/mariadb/commit/14607bc1c7136e84812174b232b935e79e823de0))
+
 ## [3.2.0](https://github.com/rolehippie/mariadb/compare/v3.1.0...v3.2.0) (2026-04-20)
 
 ### Dependencies
