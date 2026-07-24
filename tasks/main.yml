@@ -68,7 +68,7 @@
     path: "{{ item }}"
     owner: root
     group: root
-    mode: u=rw,g=r,o=r
+    mode: u=rwx,g=rx,o=rx
     state: directory
   tags:
     - mariadb
