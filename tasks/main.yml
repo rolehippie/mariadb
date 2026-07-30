@@ -223,7 +223,7 @@
     - not ansible_check_mode
   diff: false
   loop: "{{ mariadb_root_hosts }}"
-  community.mysql.mysql_user:
+  ansible.mysql.mysql_user:
     name: "{{ mariadb_root_username }}"
     password: "{{ mariadb_root_password }}"
     host: "{{ item }}"
@@ -265,7 +265,7 @@
     - mariadb_installation == 'native'
     - not ansible_check_mode
   diff: false
-  community.mysql.mysql_user:
+  ansible.mysql.mysql_user:
     name: ""
     host_all: true
     state: absent
@@ -277,7 +277,7 @@
   when:
     - mariadb_installation == 'native'
     - not ansible_check_mode
-  community.mysql.mysql_db:
+  ansible.mysql.mysql_db:
     name: test
     state: absent
     login_unix_socket: /var/run/mysqld/mysqld.sock
@@ -300,7 +300,7 @@
   loop: "{{ mariadb_global_databases + mariadb_extra_databases }}"
   loop_control:
     label: "{{ item.name }}"
-  community.mysql.mysql_db:
+  ansible.mysql.mysql_db:
     name: "{{ item.name }}"
     collation: "{{ item.collation | default(omit) }}"
     encoding: "{{ item.encoding | default(omit) }}"
@@ -318,7 +318,7 @@
   loop: "{{ mariadb_global_users + mariadb_extra_users }}"
   loop_control:
     label: "{{ item.name }}"
-  community.mysql.mysql_user:
+  ansible.mysql.mysql_user:
     name: "{{ item.name }}"
     password: "{{ item.password | default(omit) }}"
     host: "{{ item.host | default('%') }}"

@@ -3,7 +3,7 @@
   register: mariadb_galera_status
   delegate_to: "{{ mariadb_galera_primary | default('dummy') }}"
   run_once: true
-  community.mysql.mysql_info:
+  ansible.mysql.mysql_info:
     filter: settings
     login_unix_socket: /var/run/mysqld/mysqld.sock
     login_user: "{{ mariadb_root_username }}"

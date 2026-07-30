@@ -1144,7 +1144,7 @@ mariadb_username:
 
 - [rolehippie.docker](https://github.com/rolehippie/docker)
 - [community.docker](https://github.com/ansible-collections/community.docker)
-- [community.mysql](https://github.com/ansible-collections/community.mysql)
+- [ansible.mysql](https://github.com/ansible-collections/ansible.mysql)
 
 ## License
 
