@@ -31,6 +31,7 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_default_labels](#mariadb_default_labels)
   - [mariadb_default_publish](#mariadb_default_publish)
   - [mariadb_default_volumes](#mariadb_default_volumes)
+  - [mariadb_exporter_arch](#mariadb_exporter_arch)
   - [mariadb_exporter_args](#mariadb_exporter_args)
   - [mariadb_exporter_collect_info_schema_tables](#mariadb_exporter_collect_info_schema_tables)
   - [mariadb_exporter_cpu_shares](#mariadb_exporter_cpu_shares)
@@ -271,6 +272,16 @@ mariadb_default_volumes:
   - /var/lib/mysql:/var/lib/mysql
 ```
 
+### mariadb_exporter_arch
+
+Architecture for exporter binary
+
+#### Default value
+
+```YAML
+mariadb_exporter_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+```
+
 ### mariadb_exporter_args
 
 List of arguments joined for the executable
@@ -341,7 +352,7 @@ URL to the archive of the release to install
 #### Default value
 
 ```YAML
-mariadb_exporter_download: https://github.com/prometheus/mysqld_exporter/releases/download/v{{ mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64.tar.gz
+mariadb_exporter_download: https://github.com/prometheus/mysqld_exporter/releases/download/v{{ mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-{{ mariadb_exporter_arch }}.tar.gz
 ```
 
 ### mariadb_exporter_enabled
