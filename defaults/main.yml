@@ -294,7 +294,10 @@ mariadb_exporter_enabled: true
 mariadb_exporter_version: 0.19.0
 
 # @var mariadb_exporter_download:description: URL to the archive of the release to install
-mariadb_exporter_download: "https://github.com/prometheus/mysqld_exporter/releases/download/v{{ mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64.tar.gz"
+mariadb_exporter_download: "https://github.com/prometheus/mysqld_exporter/releases/download/v{{ mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-{{ mariadb_exporter_arch }}.tar.gz"
+
+# @var mariadb_exporter_arch:description: Architecture for exporter binary
+mariadb_exporter_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
 
 # @var mariadb_exporter_image:description: Docker image to use for deployment on OAuth2 Proxy
 mariadb_exporter_image: "prom/mysqld-exporter:v{{ mariadb_exporter_version }}"
