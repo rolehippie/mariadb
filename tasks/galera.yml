@@ -42,6 +42,7 @@
   when:
     - mariadb_galera_status.settings.wsrep_on == 'OFF'
     - inventory_hostname == mariadb_galera_primary
+  changed_when: false
   ansible.builtin.command: galera_new_cluster
   tags:
     - mariadb
