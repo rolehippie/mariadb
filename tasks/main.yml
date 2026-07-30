@@ -86,6 +86,7 @@
 - name: Create temp directory
   when:
     - mariadb_installation == 'native'
+    - mariadb_temp_directory is not none
     - mariadb_temp_directory | length > 0
   ansible.builtin.file:
     path: "{{ mariadb_temp_directory }}"
