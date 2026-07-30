@@ -22,9 +22,32 @@
 - name: Download repo key
   when:
     - mariadb_installation == 'native'
-  ansible.builtin.shell:
-    cmd: "curl -sSL 'https://mariadb.org/mariadb_release_signing_key.asc' | gpg --dearmor --output {{ mariadb_keyring }}"
-    creates: "{{ mariadb_keyring }}"
+  register: mariadb_key_download
+  ansible.builtin.get_url:
+    url: https://mariadb.org/mariadb_release_signing_key.asc
+    dest: "{{ mariadb_keyring }}.asc"
+    mode: u=rw,g=r,o=r
+    force: true
+  tags:
+    - mariadb
+
+- name: Check repo key
+  when:
+    - mariadb_installation == 'native'
+  register: mariadb_key_status
+  ansible.builtin.stat:
+    path: "{{ mariadb_keyring }}"
+  tags:
+    - mariadb
+
+- name: Dearmor repo key
+  when:
+    - mariadb_installation == 'native'
+    - mariadb_key_download.changed or not mariadb_key_status.stat.exists
+  register: mariadb_key_convert
+  changed_when: mariadb_key_convert.rc == 0
+  ansible.builtin.command:
+    cmd: "gpg --dearmor -o {{ mariadb_keyring }} {{ mariadb_keyring }}.asc"
   tags:
     - mariadb
 
