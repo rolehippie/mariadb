@@ -39,7 +39,7 @@
   notify:
     - Restart mariadb-exporter
   ansible.builtin.copy:
-    src: "/usr/local/src/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64/mysqld_exporter"
+    src: "/usr/local/src/mysqld_exporter-{{ mariadb_exporter_version }}.linux-{{ mariadb_exporter_arch }}/mysqld_exporter"
     dest: /usr/bin/mariadb-exporter
     remote_src: true
     owner: root
@@ -106,7 +106,7 @@
   when:
     - mariadb_installation == 'native'
   ansible.builtin.file:
-    path: "/usr/local/src/mysqld_exporter-{{ mariadb_exporter_version }}.linux-amd64"
+    path: "/usr/local/src/mysqld_exporter-{{ mariadb_exporter_version }}.linux-{{ mariadb_exporter_arch }}"
     state: absent
   tags:
     - mariadb-exporter
