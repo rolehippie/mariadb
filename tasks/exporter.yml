@@ -85,7 +85,7 @@
 - name: Create docker network
   when:
     - mariadb_installation == 'docker'
-    - false if mariadb_exporter_network is none else (mariadb_exporter_network | length > 0)| default(false)
+    - mariadb_exporter_network | length > 0
   community.docker.docker_network:
     name: '{{ mariadb_exporter_network }}'
   tags:

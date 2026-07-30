@@ -86,7 +86,7 @@
 - name: Create temp directory
   when:
     - mariadb_installation == 'native'
-    - mariadb_temp_directory | default(false)
+    - mariadb_temp_directory | length > 0
   ansible.builtin.file:
     path: "{{ mariadb_temp_directory }}"
     owner: root
@@ -113,7 +113,7 @@
   loop_control:
     label: "{{ item.name }}"
   when:
-    - item.state | default("present") == "present"
+    - item.state is not defined or item.state == 'present'
   notify:
     - Restart mariadb
   ansible.builtin.copy:
@@ -130,7 +130,7 @@
   loop_control:
     label: "{{ item.name }}"
   when:
-    - item.state | default("present") == "absent"
+    - item.state is defined and item.state == "absent"
   notify:
     - Restart mariadb
   ansible.builtin.file:
@@ -223,7 +223,7 @@
 - name: Create docker network
   when:
     - mariadb_installation == 'docker'
-    - false if mariadb_network is none else (mariadb_network | length > 0)| default(false)
+    - mariadb_network | length > 0
   community.docker.docker_network:
     name: '{{ mariadb_network }}'
   tags:
@@ -310,7 +310,7 @@
 - name: Include galera tasks
   when:
     - mariadb_installation == 'native'
-    - mariadb_galera_enabled | default(false)
+    - mariadb_galera_enabled
   ansible.builtin.include_tasks: galera.yml
   tags:
     - mariadb
@@ -354,7 +354,8 @@
     - mariadb
 
 - name: Write backup script
-  when: mariadb_backup_enabled
+  when:
+    - mariadb_backup_enabled
   ansible.builtin.template:
     src: backup.j2
     dest: /usr/local/bin/mariadb-backup
@@ -365,7 +366,8 @@
     - mariadb
 
 - name: Remove backup script
-  when: not mariadb_backup_enabled
+  when:
+    - not mariadb_backup_enabled
   ansible.builtin.file:
     path: /usr/local/bin/mariadb-backup
     state: absent
@@ -382,7 +384,8 @@
     - mariadb
 
 - name: Include exporter tasks
-  when: mariadb_exporter_enabled | default(false)
+  when:
+    - mariadb_exporter_enabled
   ansible.builtin.include_tasks: exporter.yml
   tags:
     - mariadb
