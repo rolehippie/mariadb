@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.0](https://github.com/rolehippie/mariadb/compare/v4.2.0...v4.3.0) (2026-08-10)
+
+### Dependencies
+
+* **minor:** update dependency pipx:ansible-doctor to v8.4.0 ([#67](https://github.com/rolehippie/mariadb/issues/67)) ([84d47f8](https://github.com/rolehippie/mariadb/commit/84d47f8a93721fa0f31821b50e2eb197266233ac))
+* **patch:** update dependency python to v3.14.7 ([#65](https://github.com/rolehippie/mariadb/issues/65)) ([30b939b](https://github.com/rolehippie/mariadb/commit/30b939b41c33226bb9f6f2cfe78f311f4c47a52d))
+
 ## [4.2.0](https://github.com/rolehippie/mariadb/compare/v4.1.0...v4.2.0) (2026-07-30)
 
 ## [4.1.0](https://github.com/rolehippie/mariadb/compare/v4.0.0...v4.1.0) (2026-07-27)
