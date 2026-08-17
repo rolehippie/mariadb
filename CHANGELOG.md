@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.4.0](https://github.com/rolehippie/mariadb/compare/v4.3.0...v4.4.0) (2026-08-17)
+
+### Dependencies
+
+* **minor:** update dependency pipx:ansible-lint to v26.8.0 ([#70](https://github.com/rolehippie/mariadb/issues/70)) ([d170574](https://github.com/rolehippie/mariadb/commit/d170574ae228c520b7809e19b4c8203b5466d7f7))
+* **minor:** update dependency pipx:molecule to v26.8.0 ([#71](https://github.com/rolehippie/mariadb/issues/71)) ([9608c1a](https://github.com/rolehippie/mariadb/commit/9608c1a94110c3df03c2d3ed366f88cfd62fec9b))
+* **minor:** update dependency prometheus/mysqld_exporter to v0.20.0 ([#72](https://github.com/rolehippie/mariadb/issues/72)) ([f9165dc](https://github.com/rolehippie/mariadb/commit/f9165dcc63d04c89b74eba843f80a6d810064cf8))
+* **patch:** update dependency pipx:ansible-core to v2.21.3 ([#68](https://github.com/rolehippie/mariadb/issues/68)) ([07135ff](https://github.com/rolehippie/mariadb/commit/07135ffba7617e15d2486cd6002839bc4dc46f24))
+* **patch:** update dependency pre-commit to v4.6.2 ([#69](https://github.com/rolehippie/mariadb/issues/69)) ([e359bf5](https://github.com/rolehippie/mariadb/commit/e359bf59ee01cc0bde15284508bf0d58affaebe7))
+
 ## [4.3.0](https://github.com/rolehippie/mariadb/compare/v4.2.0...v4.3.0) (2026-08-10)
 
 ### Dependencies
