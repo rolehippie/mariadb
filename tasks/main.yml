@@ -1,64 +1,79 @@
 ---
-- name: Remove legacy key
+- name: Remove legacy trusted keyring files
   when:
     - mariadb_installation == 'native'
-  ansible.builtin.apt_key:
-    id: 177F4010FE56CA3336300305F1656F24C74CD1D8
+    - mariadb_upstream_repo
+  ansible.builtin.file:
+    path: "{{ mariadb_legacy_keyring }}"
     state: absent
   tags:
     - mariadb
 
-- name: Remove legacy repo
+- name: Remove legacy trusted keyring asc file
   when:
     - mariadb_installation == 'native'
-  ansible.builtin.apt_repository:
-    repo: "deb [arch={{ mariadb_upstream_arch }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
-    filename: mariadb
-    update_cache: false
+    - mariadb_upstream_repo
+  ansible.builtin.file:
+    path: "{{ mariadb_legacy_keyring }}.asc"
     state: absent
+  tags:
+    - mariadb
+
+- name: Create keyring directory
+  when:
+    - mariadb_installation == 'native'
+    - mariadb_upstream_repo
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+    state: directory
   tags:
     - mariadb
 
 - name: Download repo key
   when:
     - mariadb_installation == 'native'
-  register: mariadb_key_download
+    - mariadb_upstream_repo
   ansible.builtin.get_url:
-    url: https://mariadb.org/mariadb_release_signing_key.asc
-    dest: "{{ mariadb_keyring }}.asc"
+    url: "{{ mariadb_key_url }}"
+    dest: "{{ mariadb_keyring }}"
     mode: u=rw,g=r,o=r
-    force: true
-  tags:
-    - mariadb
-
-- name: Check repo key
-  when:
-    - mariadb_installation == 'native'
-  register: mariadb_key_status
-  ansible.builtin.stat:
-    path: "{{ mariadb_keyring }}"
-  tags:
-    - mariadb
-
-- name: Dearmor repo key
-  when:
-    - mariadb_installation == 'native'
-    - mariadb_key_download.changed or not mariadb_key_status.stat.exists
-  register: mariadb_key_convert
-  changed_when: mariadb_key_convert.rc == 0
-  ansible.builtin.command:
-    cmd: "gpg --dearmor -o {{ mariadb_keyring }} {{ mariadb_keyring }}.asc"
   tags:
     - mariadb
 
 - name: Add apt repository
   when:
     - mariadb_installation == 'native'
+    - mariadb_upstream_repo
   ansible.builtin.apt_repository:
-    repo: "deb [arch={{ mariadb_upstream_arch }} signed-by={{ mariadb_keyring }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
+    repo: "deb [arch={{ mariadb_upstream_arch }} signed-by={{ mariadb_keyring }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/repo/{{ mariadb_repo_os }} {{ ansible_distribution_release }} main"
     filename: mariadb
     update_cache: true
     state: present
+  tags:
+    - mariadb
+
+- name: Remove apt repository
+  when:
+    - mariadb_installation == 'native'
+    - not mariadb_upstream_repo
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ mariadb_upstream_arch }} signed-by={{ mariadb_keyring }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/repo/{{ mariadb_repo_os }} {{ ansible_distribution_release }} main"
+    filename: mariadb
+    update_cache: true
+    state: absent
+  tags:
+    - mariadb
+
+- name: Remove downloaded repo keyring
+  when:
+    - mariadb_installation == 'native'
+    - not mariadb_upstream_repo
+  ansible.builtin.file:
+    path: "{{ mariadb_keyring }}"
+    state: absent
   tags:
     - mariadb
 
@@ -375,12 +390,56 @@
   tags:
     - mariadb
 
-- name: Create backup cronjobs
-  ansible.builtin.cron:
-    name: mariadb backup
-    special_time: "{{ mariadb_backup_cron }}"
-    job: /usr/bin/cronic /usr/local/bin/mariadb-backup
-    state: "{{ 'present' if mariadb_backup_enabled else 'absent' }}"
+- name: Write backup systemd service
+  when:
+    - mariadb_backup_enabled
+  ansible.builtin.template:
+    src: backup-service.j2
+    dest: /etc/systemd/system/mariadb-backup.service
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  tags:
+    - mariadb
+
+- name: Remove backup systemd service
+  when:
+    - not mariadb_backup_enabled
+  ansible.builtin.file:
+    path: /etc/systemd/system/mariadb-backup.service
+    state: absent
+  tags:
+    - mariadb
+
+- name: Write backup systemd timer
+  when:
+    - mariadb_backup_enabled
+  ansible.builtin.template:
+    src: backup-timer.j2
+    dest: /etc/systemd/system/mariadb-backup.timer
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  tags:
+    - mariadb
+
+- name: Remove backup systemd timer
+  when:
+    - not mariadb_backup_enabled
+  ansible.builtin.file:
+    path: /etc/systemd/system/mariadb-backup.timer
+    state: absent
+  tags:
+    - mariadb
+
+- name: Manage backup systemd timer service
+  when:
+    - mariadb_backup_enabled
+  ansible.builtin.systemd:
+    name: mariadb-backup.timer
+    state: "started"
+    daemon_reload: true
+    enabled: true
   tags:
     - mariadb
 

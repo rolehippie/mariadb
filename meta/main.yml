@@ -32,6 +32,12 @@ galaxy_info:
         - focal
         - jammy
         - noble
+        - resolute
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+        - trixie
   galaxy_tags:
     - mariadb
     - database

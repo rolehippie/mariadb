@@ -5,17 +5,42 @@ mariadb_installation: native
 # @var mariadb_upstream_repo:description: Install from upstream repository
 mariadb_upstream_repo: true
 
+# @var mariadb_repo_os_map:description: Distribution mapping for repository URL
+mariadb_repo_os_map:
+  Debian: debian
+  Raspbian: debian
+  Ubuntu: ubuntu
+
+# @var mariadb_repo_os:description: Target OS distribution name for repository URL
+mariadb_repo_os: "{{ mariadb_repo_os_map[ansible_distribution] | default(ansible_distribution | lower) }}"
+
+# @var mariadb_upstream_version_map:description: Release codename mapping to MariaDB LTS version
+mariadb_upstream_version_map:
+  bullseye: "10.11"
+  bookworm: "11.4"
+  trixie: "12.3"
+  focal: "10.11"
+  jammy: "11.4"
+  noble: "11.4"
+  resolute: "12.3"
+
 # @var mariadb_upstream_version:description: Upstream repo version
-mariadb_upstream_version: 11.8
+# Fallback is 11.4 (MariaDB LTS, released 2023) which is supported for all
+# currently supported Debian/Ubuntu releases. '12.3' is only used explicitly
+# for newer codenames where it is known to exist.
+mariadb_upstream_version: "{{ mariadb_upstream_version_map[ansible_distribution_release] | default('11.4') }}"
 
 # @var mariadb_upstream_mirror:description: Upstream repo mirror URL
-mariadb_upstream_mirror: http://mirror.23m.com/mariadb/repo
+mariadb_upstream_mirror: https://dlm.mariadb.com/repo/mariadb-server
 
 # @var mariadb_upstream_arch:description: Upstream repo architecture
 mariadb_upstream_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
 
+# @var mariadb_image_version:description: MariaDB version tag for the Docker image
+mariadb_image_version: "11.4"
+
 # @var mariadb_image:description: Docker image to use for deployment
-mariadb_image: "mariadb:{{ mariadb_upstream_version }}"
+mariadb_image: "mariadb:{{ mariadb_image_version }}"
 
 # @var mariadb_pull_image:description: Pull image as part of the tasks
 mariadb_pull_image: true
@@ -91,8 +116,14 @@ mariadb_cpu_shares:
 # @var mariadb_number_of_cpus:example: $ "1.0"
 mariadb_number_of_cpus:
 
+# @var mariadb_key_url:description: URL for the repository keyring
+mariadb_key_url: https://supplychain.mariadb.com/mariadb-keyring-2025.gpg
+
 # @var mariadb_keyring:description: Path for the repository keyring
-mariadb_keyring: /usr/share/keyrings/mariadb-archive-keyring.gpg
+mariadb_keyring: /etc/apt/keyrings/mariadb-keyring.gpg
+
+# @var mariadb_legacy_keyring:description: Legacy path of the previous keyring to clean up
+mariadb_legacy_keyring: /usr/share/keyrings/mariadb-archive-keyring.gpg
 
 # @var mariadb_packages:description: List of packages to install
 mariadb_packages:
@@ -277,8 +308,8 @@ mariadb_backup_retention: +7
 # @var mariadb_backup_addition_script:description: Additional commands at the end of the script
 mariadb_backup_addition_script:
 
-# @var mariadb_backup_cron:description: A simple cron timing definition like hourly, daily or weekly
-mariadb_backup_cron: daily
+# @var mariadb_backup_on_calendar:description: Systemd OnCalendar schedule for backups
+mariadb_backup_on_calendar: daily
 
 # @var mariadb_backup_ignore:description: Ignoring this filter via grep on database selection
 mariadb_backup_ignore: (_backup|mysql|sys|information_schema|performance_schema)

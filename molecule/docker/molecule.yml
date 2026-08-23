@@ -1,0 +1,44 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+  env:
+    ANSIBLE_GALAXY_DISPLAY_PROGRESS: "false"
+
+driver:
+  name: docker
+
+platforms:
+  # The docker scenario installs the published `rolehippie.docker` role, which
+  # hardcodes `ubuntu` as the Docker repo OS. An Ubuntu image is therefore
+  # required so the repo URL resolves (e.g. .../linux/ubuntu noble).
+  - name: mariadb-docker-ubuntu-24
+    image: geerlingguy/docker-ubuntu2404-ansible:latest
+    command: /lib/systemd/systemd
+    hostname: ubuntu
+    privileged: true
+    pre_build_image: true
+    cgroupns_mode: host
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    capabilities:
+      - SYS_ADMIN
+    env:
+      container: docker
+
+provisioner:
+  name: ansible
+  connection_options:
+    ansible_become: true
+  env:
+    ANSIBLE_FILTER_PLUGINS: "${ANSIBLE_FILTER_PLUGINS:-./plugins/filter}"
+    ANSIBLE_LIBRARY: "${ANSIBLE_LIBRARY:-./library}"
+
+verifier:
+  name: testinfra
+
+...
