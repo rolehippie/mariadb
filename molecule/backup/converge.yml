@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: rolehippie.mariadb
+      vars:
+        mariadb_backup_enabled: true
+
+...

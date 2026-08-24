@@ -13,15 +13,27 @@ Ansible role to install and configure a simple MariaDB.
 
 Building and improving this Ansible role have been sponsored by my current and previous employers like **[Cloudpunks GmbH](https://cloudpunks.de)** and **[Proact Deutschland GmbH](https://www.proact.eu)**.
 
+## Breaking changes
+
+This version contains breaking changes over previous releases:
+
+- `mariadb_backup_cron` has been replaced by `mariadb_backup_on_calendar`. Backups
+  are now managed via a systemd timer instead of a cron job. Playbooks that set
+  `mariadb_backup_cron` must be updated to use `mariadb_backup_on_calendar`.
+- `mariadb_backup_retention` default changed from `7` to `+7`. This is a semantic
+  change for the `find -ctime` based retention cleanup (a positive value now keeps
+  the last N days instead of removing files older than N days). Adjust the value if
+  your previous setup relied on the old behaviour.
+
 ## Table of contents
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
   - [mariadb_backup_addition_script](#mariadb_backup_addition_script)
-  - [mariadb_backup_cron](#mariadb_backup_cron)
   - [mariadb_backup_enabled](#mariadb_backup_enabled)
   - [mariadb_backup_formatting](#mariadb_backup_formatting)
   - [mariadb_backup_ignore](#mariadb_backup_ignore)
+  - [mariadb_backup_on_calendar](#mariadb_backup_on_calendar)
   - [mariadb_backup_path](#mariadb_backup_path)
   - [mariadb_backup_retention](#mariadb_backup_retention)
   - [mariadb_bind_address](#mariadb_bind_address)
@@ -66,6 +78,7 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_global_users](#mariadb_global_users)
   - [mariadb_ignore_db_dirs](#mariadb_ignore_db_dirs)
   - [mariadb_image](#mariadb_image)
+  - [mariadb_image_version](#mariadb_image_version)
   - [mariadb_innodb_buffer_pool_instances](#mariadb_innodb_buffer_pool_instances)
   - [mariadb_innodb_buffer_pool_size](#mariadb_innodb_buffer_pool_size)
   - [mariadb_innodb_file_per_table](#mariadb_innodb_file_per_table)
@@ -74,7 +87,9 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_innodb_max_dirty_pages_pct](#mariadb_innodb_max_dirty_pages_pct)
   - [mariadb_installation](#mariadb_installation)
   - [mariadb_key_buffer_size](#mariadb_key_buffer_size)
+  - [mariadb_key_url](#mariadb_key_url)
   - [mariadb_keyring](#mariadb_keyring)
+  - [mariadb_legacy_keyring](#mariadb_legacy_keyring)
   - [mariadb_limit_number_files](#mariadb_limit_number_files)
   - [mariadb_lower_case_table_names](#mariadb_lower_case_table_names)
   - [mariadb_max_allowed_packet](#mariadb_max_allowed_packet)
@@ -90,6 +105,8 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_pull_image](#mariadb_pull_image)
   - [mariadb_query_cache_size](#mariadb_query_cache_size)
   - [mariadb_query_cache_type](#mariadb_query_cache_type)
+  - [mariadb_repo_os](#mariadb_repo_os)
+  - [mariadb_repo_os_map](#mariadb_repo_os_map)
   - [mariadb_root_hosts](#mariadb_root_hosts)
   - [mariadb_root_password](#mariadb_root_password)
   - [mariadb_root_username](#mariadb_root_username)
@@ -101,6 +118,7 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [mariadb_upstream_mirror](#mariadb_upstream_mirror)
   - [mariadb_upstream_repo](#mariadb_upstream_repo)
   - [mariadb_upstream_version](#mariadb_upstream_version)
+  - [mariadb_upstream_version_map](#mariadb_upstream_version_map)
   - [mariadb_username](#mariadb_username)
 - [Discovered Tags](#discovered-tags)
 - [Dependencies](#dependencies)
@@ -123,16 +141,6 @@ Additional commands at the end of the script
 
 ```YAML
 mariadb_backup_addition_script:
-```
-
-### mariadb_backup_cron
-
-A simple cron timing definition like hourly, daily or weekly
-
-#### Default value
-
-```YAML
-mariadb_backup_cron: daily
 ```
 
 ### mariadb_backup_enabled
@@ -165,6 +173,16 @@ Ignoring this filter via grep on database selection
 mariadb_backup_ignore: (_backup|mysql|sys|information_schema|performance_schema)
 ```
 
+### mariadb_backup_on_calendar
+
+Systemd OnCalendar schedule for backups
+
+#### Default value
+
+```YAML
+mariadb_backup_on_calendar: daily
+```
+
 ### mariadb_backup_path
 
 Path to store the backups
@@ -182,7 +200,7 @@ Retention period to keep backups
 #### Default value
 
 ```YAML
-mariadb_backup_retention: 7
+mariadb_backup_retention: +7
 ```
 
 ### mariadb_bind_address
@@ -750,7 +768,17 @@ Docker image to use for deployment
 #### Default value
 
 ```YAML
-mariadb_image: mariadb:{{ mariadb_upstream_version }}
+mariadb_image: mariadb:{{ mariadb_image_version }}
+```
+
+### mariadb_image_version
+
+MariaDB version tag for the Docker image
+
+#### Default value
+
+```YAML
+mariadb_image_version: "11.4"
 ```
 
 ### mariadb_innodb_buffer_pool_instances
@@ -833,6 +861,16 @@ Key buffer size
 mariadb_key_buffer_size: 32M
 ```
 
+### mariadb_key_url
+
+URL for the repository keyring
+
+#### Default value
+
+```YAML
+mariadb_key_url: https://supplychain.mariadb.com/mariadb-keyring-2025.gpg
+```
+
 ### mariadb_keyring
 
 Path for the repository keyring
@@ -840,7 +878,17 @@ Path for the repository keyring
 #### Default value
 
 ```YAML
-mariadb_keyring: /usr/share/keyrings/mariadb-archive-keyring.gpg
+mariadb_keyring: /etc/apt/keyrings/mariadb-keyring.gpg
+```
+
+### mariadb_legacy_keyring
+
+Legacy path of the previous keyring to clean up
+
+#### Default value
+
+```YAML
+mariadb_legacy_keyring: /usr/share/keyrings/mariadb-archive-keyring.gpg
 ```
 
 ### mariadb_limit_number_files
@@ -1023,6 +1071,29 @@ Query cache type
 mariadb_query_cache_type: 0
 ```
 
+### mariadb_repo_os
+
+Target OS distribution name for repository URL
+
+#### Default value
+
+```YAML
+mariadb_repo_os: "{{ mariadb_repo_os_map[ansible_distribution] | default(ansible_distribution | lower) }}"
+```
+
+### mariadb_repo_os_map
+
+Distribution mapping for repository URL
+
+#### Default value
+
+```YAML
+mariadb_repo_os_map:
+  Debian: debian
+  Raspbian: debian
+  Ubuntu: ubuntu
+```
+
 ### mariadb_root_hosts
 
 Allowed hosts for root user
@@ -1112,7 +1183,7 @@ Upstream repo mirror URL
 #### Default value
 
 ```YAML
-mariadb_upstream_mirror: http://mirror.23m.com/mariadb/repo
+mariadb_upstream_mirror: https://dlm.mariadb.com/repo/mariadb-server
 ```
 
 ### mariadb_upstream_repo
@@ -1132,7 +1203,24 @@ Upstream repo version
 #### Default value
 
 ```YAML
-mariadb_upstream_version: 11.8
+mariadb_upstream_version: "{{ mariadb_upstream_version_map[ansible_distribution_release] | default('11.4') }}"
+```
+
+### mariadb_upstream_version_map
+
+Release codename mapping to MariaDB LTS version
+
+#### Default value
+
+```YAML
+mariadb_upstream_version_map:
+  bookworm: '11.4'
+  bullseye: '10.11'
+  focal: '10.11'
+  jammy: '11.4'
+  noble: '11.4'
+  resolute: '12.3'
+  trixie: '12.3'
 ```
 
 ### mariadb_username

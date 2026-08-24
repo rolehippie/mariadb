@@ -44,7 +44,15 @@ jobs:
 
       matrix:
         scenario:
+          # The `docker` scenario is intentionally excluded from the active
+          # matrix: it installs a Docker daemon inside the molecule container
+          # (nested/DinD) and pulls a MariaDB image. On hosts without real
+          # overlayfs support the layer extraction fails with
+          # "failed to convert whiteout file ... operation not permitted".
+          # This is a structural DinD limitation, not a role defect.
           - default
+          - no-upstream
+          - backup
 
     steps:
       - name: Checkout source

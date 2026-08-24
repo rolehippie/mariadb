@@ -10,13 +10,12 @@ driver:
   name: docker
 
 platforms:
-  - name: mariadb-ubuntu-24
-    image: quay.io/k0sproject/bootloose-ubuntu24.04:latest
-    command: /sbin/init
+  - name: mariadb-ubuntu-22
+    image: geerlingguy/docker-ubuntu2204-ansible:latest
+    command: /lib/systemd/systemd
     hostname: ubuntu
     privileged: true
     pre_build_image: true
-    override_command: true
     cgroupns_mode: host
     tmpfs:
       - /run
@@ -27,13 +26,76 @@ platforms:
       - SYS_ADMIN
     env:
       container: docker
-  - name: mariadb-ubuntu-22
-    image: quay.io/k0sproject/bootloose-ubuntu22.04:latest
-    command: /sbin/init
+  - name: mariadb-ubuntu-24
+    image: geerlingguy/docker-ubuntu2404-ansible:latest
+    command: /lib/systemd/systemd
     hostname: ubuntu
     privileged: true
     pre_build_image: true
-    override_command: true
+    cgroupns_mode: host
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    capabilities:
+      - SYS_ADMIN
+    env:
+      container: docker
+  - name: mariadb-ubuntu-26
+    image: geerlingguy/docker-ubuntu2604-ansible:latest
+    command: /lib/systemd/systemd
+    hostname: ubuntu
+    privileged: true
+    pre_build_image: true
+    cgroupns_mode: host
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    capabilities:
+      - SYS_ADMIN
+    env:
+      container: docker
+  - name: mariadb-debian-11
+    image: geerlingguy/docker-debian11-ansible:latest
+    command: /lib/systemd/systemd
+    hostname: debian
+    privileged: true
+    pre_build_image: true
+    cgroupns_mode: host
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    capabilities:
+      - SYS_ADMIN
+    env:
+      container: docker
+  - name: mariadb-debian-12
+    image: geerlingguy/docker-debian12-ansible:latest
+    command: /lib/systemd/systemd
+    hostname: debian
+    privileged: true
+    pre_build_image: true
+    cgroupns_mode: host
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    capabilities:
+      - SYS_ADMIN
+    env:
+      container: docker
+  - name: mariadb-debian-13
+    image: geerlingguy/docker-debian13-ansible:latest
+    command: /lib/systemd/systemd
+    hostname: debian
+    privileged: true
+    pre_build_image: true
     cgroupns_mode: host
     tmpfs:
       - /run
@@ -52,6 +114,15 @@ provisioner:
   env:
     ANSIBLE_FILTER_PLUGINS: "${ANSIBLE_FILTER_PLUGINS:-./plugins/filter}"
     ANSIBLE_LIBRARY: "${ANSIBLE_LIBRARY:-./library}"
+  inventory:
+    # The standard MariaDB version from the respective distro repository is
+    # tested for all platforms (no mariadb_upstream_version pinning).
+    #
+    # Note: Ubuntu 20.04 (focal) is intentionally NOT part of the test matrix.
+    # ansible-core 2.21 requires Python >= 3.9 on the target, but focal only
+    # ships Python 3.8 and offers no newer Python interpreter in its standard
+    # repositories. It is therefore not testable with the pinned toolchain.
+    host_vars:
 
 verifier:
   name: testinfra

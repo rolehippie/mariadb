@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    # Install a Docker daemon so that the docker installation path of the
+    # mariadb role can manage images and start a container-based service.
+    - role: rolehippie.docker
+    - role: rolehippie.mariadb
+      vars:
+        mariadb_installation: docker
+        mariadb_image_version: "11.4"
+        mariadb_default_publish:
+          - 127.0.0.1:3306:3306
+
+...

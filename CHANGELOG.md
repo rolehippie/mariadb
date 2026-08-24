@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Breaking changes
+
+- `mariadb_backup_cron` has been replaced by `mariadb_backup_on_calendar`. Backups
+  are now managed via a systemd timer instead of a cron job. Playbooks that set
+  `mariadb_backup_cron` must be updated to use `mariadb_backup_on_calendar`.
+- `mariadb_backup_retention` default changed from `7` to `+7`. This is a semantic
+  change for the `find -ctime` based retention cleanup. Adjust the value if your
+  previous setup relied on the old behaviour.
+
 ## [4.4.0](https://github.com/rolehippie/mariadb/compare/v4.3.0...v4.4.0) (2026-08-17)
 
 ### Dependencies
