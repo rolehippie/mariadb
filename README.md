@@ -637,7 +637,7 @@ Node address within galera cluster
 #### Default value
 
 ```YAML
-mariadb_galera_address: '{{ ansible_facts['address'] }}'
+mariadb_galera_address: "{{ ansible_facts['address'] }}"
 ```
 
 ### mariadb_galera_cluster
