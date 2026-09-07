@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.5.0](https://github.com/rolehippie/mariadb/compare/v4.4.1...v4.5.0) (2026-09-07)
+
+### Features
+
+* add separate requirements for molecule run ([af568fe](https://github.com/rolehippie/mariadb/commit/af568fea1481a40359d082b0f6fc7bbb9077f0b3))
+* use new required facts as attributes ([c8679d1](https://github.com/rolehippie/mariadb/commit/c8679d12d361a1c38e287aeafe3cdb52f8f548e2))
+
+### Dependencies
+
+* **minor:** update dependency community.docker to >=5.3.0,<5.4.0 ([#76](https://github.com/rolehippie/mariadb/issues/76)) ([2bfb84a](https://github.com/rolehippie/mariadb/commit/2bfb84a81dfb93ccddaab59da317c4449176eac1))
+
 ## [4.4.1](https://github.com/rolehippie/mariadb/compare/v4.4.0...v4.4.1) (2026-08-31)
 
 ### Dependencies
