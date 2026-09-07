@@ -279,7 +279,7 @@ Architecture for exporter binary
 #### Default value
 
 ```YAML
-mariadb_exporter_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+mariadb_exporter_arch: "{{ 'arm64' if ansible_facts['architecture'] in ['aarch64', 'arm64'] else 'amd64' }}"
 ```
 
 ### mariadb_exporter_args
@@ -637,7 +637,7 @@ Node address within galera cluster
 #### Default value
 
 ```YAML
-mariadb_galera_address: '{{ ansible_address }}'
+mariadb_galera_address: '{{ ansible_facts['address'] }}'
 ```
 
 ### mariadb_galera_cluster
@@ -1102,7 +1102,7 @@ Upstream repo architecture
 #### Default value
 
 ```YAML
-mariadb_upstream_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+mariadb_upstream_arch: "{{ 'arm64' if ansible_facts['architecture'] in ['aarch64', 'arm64'] else 'amd64' }}"
 ```
 
 ### mariadb_upstream_mirror

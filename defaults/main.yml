@@ -12,7 +12,7 @@ mariadb_upstream_version: 11.8
 mariadb_upstream_mirror: http://mirror.23m.com/mariadb/repo
 
 # @var mariadb_upstream_arch:description: Upstream repo architecture
-mariadb_upstream_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+mariadb_upstream_arch: "{{ 'arm64' if ansible_facts['architecture'] in ['aarch64', 'arm64'] else 'amd64' }}"
 
 # @var mariadb_image:description: Docker image to use for deployment
 mariadb_image: "mariadb:{{ mariadb_upstream_version }}"
@@ -176,7 +176,7 @@ mariadb_galera_cluster: galera
 mariadb_galera_nodes: []
 
 # @var mariadb_galera_address:description: Node address within galera cluster
-mariadb_galera_address: "{{ ansible_address }}"
+mariadb_galera_address: "{{ ansible_facts['address'] }}"
 
 # @var mariadb_galera_name:description: Node name within galera cluster
 mariadb_galera_name: "{{ inventory_hostname }}"
@@ -297,7 +297,7 @@ mariadb_exporter_version: 0.20.0
 mariadb_exporter_download: "https://github.com/prometheus/mysqld_exporter/releases/download/v{{ mariadb_exporter_version }}/mysqld_exporter-{{ mariadb_exporter_version }}.linux-{{ mariadb_exporter_arch }}.tar.gz"
 
 # @var mariadb_exporter_arch:description: Architecture for exporter binary
-mariadb_exporter_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+mariadb_exporter_arch: "{{ 'arm64' if ansible_facts['architecture'] in ['aarch64', 'arm64'] else 'amd64' }}"
 
 # @var mariadb_exporter_image:description: Docker image to use for deployment on OAuth2 Proxy
 mariadb_exporter_image: "prom/mysqld-exporter:v{{ mariadb_exporter_version }}"

@@ -12,7 +12,7 @@
   when:
     - mariadb_installation == 'native'
   ansible.builtin.apt_repository:
-    repo: "deb [arch={{ mariadb_upstream_arch }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
+    repo: "deb [arch={{ mariadb_upstream_arch }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_facts['distribution_release'] }} main"
     filename: mariadb
     update_cache: false
     state: absent
@@ -47,7 +47,7 @@
   register: mariadb_key_convert
   changed_when: mariadb_key_convert.rc == 0
   ansible.builtin.command:
-    cmd: "gpg --dearmor -o {{ mariadb_keyring }} {{ mariadb_keyring }}.asc"
+    cmd: "gpg --batch --yes --dearmor -o {{ mariadb_keyring }} {{ mariadb_keyring }}.asc"
   tags:
     - mariadb
 
@@ -55,7 +55,7 @@
   when:
     - mariadb_installation == 'native'
   ansible.builtin.apt_repository:
-    repo: "deb [arch={{ mariadb_upstream_arch }} signed-by={{ mariadb_keyring }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_distribution_release }} main"
+    repo: "deb [arch={{ mariadb_upstream_arch }} signed-by={{ mariadb_keyring }}] {{ mariadb_upstream_mirror }}/{{ mariadb_upstream_version }}/ubuntu {{ ansible_facts['distribution_release'] }} main"
     filename: mariadb
     update_cache: true
     state: present
