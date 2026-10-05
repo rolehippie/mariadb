@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.6.0](https://github.com/rolehippie/mariadb/compare/v4.5.0...v4.6.0) (2026-10-05)
+
+### Dependencies
+
+* **minor:** update dependency community.docker to >=5.4.0,<5.5.0 ([#84](https://github.com/rolehippie/mariadb/issues/84)) ([41fffb7](https://github.com/rolehippie/mariadb/commit/41fffb721058a49d07f599a6ccc52e2ad7dacf73))
+* **mise:** update dependency pipx:ansible-core to v2.21.4 ([#77](https://github.com/rolehippie/mariadb/issues/77)) ([99fdd07](https://github.com/rolehippie/mariadb/commit/99fdd07a88e57e42599ecaa24f279bc79b49805e))
+* **mise:** update dependency pipx:ansible-doctor to v8.4.2 ([#79](https://github.com/rolehippie/mariadb/issues/79)) ([a0f8596](https://github.com/rolehippie/mariadb/commit/a0f85969a16ff956cc91aed5e3af687a301dccdc))
+* **mise:** update dependency pipx:ansible-lint to v26.9.0 ([#80](https://github.com/rolehippie/mariadb/issues/80)) ([e8df638](https://github.com/rolehippie/mariadb/commit/e8df63821d9a4a5c29528a9b672981f61faec802))
+* **mise:** update dependency pipx:molecule to v26.9.0 ([#81](https://github.com/rolehippie/mariadb/issues/81)) ([dc57fc5](https://github.com/rolehippie/mariadb/commit/dc57fc5d78c85f59c1cf4606067fbaabaede9ae5))
+* **mise:** update dependency prek to v0.5.3 ([#78](https://github.com/rolehippie/mariadb/issues/78)) ([61af997](https://github.com/rolehippie/mariadb/commit/61af9975bcf53de974ec8436bb019d803a6c9beb))
+* **mise:** update dependency prek to v0.5.4 ([#82](https://github.com/rolehippie/mariadb/issues/82)) ([842ed68](https://github.com/rolehippie/mariadb/commit/842ed68a8501820c9c802e0b13e9477e57ce00b3))
+* **mise:** update dependency prek to v0.5.5 ([#85](https://github.com/rolehippie/mariadb/issues/85)) ([7942ce5](https://github.com/rolehippie/mariadb/commit/7942ce588c34022c6f16f8161515f19b4b730241))
+
 ## [4.5.0](https://github.com/rolehippie/mariadb/compare/v4.4.1...v4.5.0) (2026-09-07)
 
 ### Features
